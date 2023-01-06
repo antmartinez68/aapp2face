@@ -115,3 +115,15 @@ class FACeSoapClient(FACeClient):
         self._verify_result_header(result_header)
 
         return result
+
+    def consultar_estados(self):
+        """Devuelve la respuesta del método SOAP `consultarEstados`.
+
+        Este método retorna la lista de estados que maneja FACe para la
+        gestión de la factura. Existen dos flujos principales, el
+        ordinario y el de anulación. El flujo ordinario corresponde al
+        ciclo de vida de la factura, y el flujo de anulación corresponde
+        al ciclo de solicitud de anulación.
+        """
+
+        return self._llamar_metodo_soap("consultarEstados")

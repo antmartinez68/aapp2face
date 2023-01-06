@@ -58,3 +58,8 @@ class FACeFakeSoapClient(FACeClient):
         self._verify_result_header(result_header)
 
         return data
+
+    def consultar_estados(self):
+        """Simula una llamada al método `consultarEstados` en FACe."""
+
+        return self._import_response("consultarEstados")

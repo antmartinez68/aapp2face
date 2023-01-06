@@ -24,3 +24,12 @@ class FACeResult:
     codigo: str
     descripcion: str
     codigo_seguimiento: str
+
+
+@dataclass
+class Estado:
+    flujo: str
+    nombre: str
+    nombre_publico: str
+    codigo: str
+    descripcion: str

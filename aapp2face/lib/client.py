@@ -2,7 +2,7 @@
 Módulo definición de la interfaz FACeClient
 """
 
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from . import exceptions as excs
 from .objects import FACeResult
@@ -30,3 +30,9 @@ class FACeClient(ABC):
                 raise excs.FACeManagementException(codigo_error, mensaje_error)
             else:
                 raise excs.UndocumentedException(codigo_error, mensaje_error)
+
+    @abstractmethod
+    def consultar_estados(self):
+        """Consultar la lista de estados que maneja FACe."""
+
+        pass
