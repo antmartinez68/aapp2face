@@ -2,15 +2,22 @@
 Módulo CLI de AAPP2FACe
 """
 
+import dataclasses
 from configparser import ConfigParser
 from pathlib import Path
 from typing import Optional
 
 import typer
 
-from aapp2face import FACeConnection, FACeFakeSoapClient, FACeSoapClient, __version__
+from aapp2face import (
+    FACeConnection,
+    FACeFakeSoapClient,
+    FACeSoapClient,
+    __version__,
+    exceptions,
+)
 
-from .helpers import err_rprint, get_config_path, rprint
+from .helpers import err_rprint, export_data, get_config_path, rprint, verify_export
 
 # Config constants
 CONFIG_FILENAME = "config.ini"
@@ -112,6 +119,47 @@ def config(ctx: typer.Context):
         for opcion in ctx.obj.config.options(seccion):
             valor = ctx.obj.config.get(seccion, opcion)
             rprint(f"[blue]{seccion}.{opcion}[/blue] = {valor}")
+
+
+@app.command()
+def estados(
+    ctx: typer.Context,
+    export: Optional[Path] = typer.Option(
+        None,
+        "--export",
+        "-e",
+        show_default=False,
+        help="Exporta la salida a un archivo CSV.",
+    ),
+):
+    """Lista los estados que maneja FACe para la gestión de las facturas.
+
+    Existen dos flujos principales, el ordinario y el de anulación. El
+    flujo ordinario corresponde al ciclo de vida de la factura, y el
+    flujo de anulación corresponde al ciclo de solicitud de anulación.
+    """
+
+    verify_export(export)
+
+    try:
+        estados = ctx.obj.face_connection.consultar_estados()
+    except exceptions.FACeManagementException as exc:
+        err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
+        raise typer.Exit(4)
+
+    if export:
+        data = [dataclasses.asdict(estado) for estado in estados]
+        export_data(data, export)
+    else:
+        for estado in estados:
+            rprint(f"[field]Código:[/field]         [info]{estado.codigo}[/info]")
+            rprint(f"[field]Flujo:[/field]          {estado.flujo}")
+            rprint(f"[field]Nombre:[/field]         {estado.nombre}")
+            rprint(f"[field]Nombre público:[/field] {estado.nombre_publico}")
+            rprint(f"[field]Descripción:[/field]    {estado.descripcion}")
+            print("")
+
+    rprint(f"[info]{len(estados)}[/info] estados disponibles")
 
 
 def version_callback(value: bool):

@@ -1,0 +1,102 @@
+{
+    "resultado": {
+        "codigo": "0",
+        "descripcion": "Correcto",
+        "codigoSeguimiento": null
+    },
+    "estados": {
+        "Estado": [
+            {
+                "flujo": "ordinario",
+                "nombre": "Registrada",
+                "nombrePublico": "Registrada",
+                "codigo": "1200",
+                "descripcion": "La factura ha sido registrada en el registro electrónico REC"
+            },
+            {
+                "flujo": "ordinario",
+                "nombre": "Registrada en RCF",
+                "nombrePublico": "Registrada en RCF",
+                "codigo": "1300",
+                "descripcion": "La factura ha sido registrada en RCF"
+            },
+            {
+                "flujo": "ordinario",
+                "nombre": "Verificada en RCF",
+                "nombrePublico": "Registrada en RCF",
+                "codigo": "1400",
+                "descripcion": "la factura ha sido verificada en RCF"
+            },
+            {
+                "flujo": "ordinario",
+                "nombre": "Recibida en destino",
+                "nombrePublico": "Registrada en RCF",
+                "codigo": "2100",
+                "descripcion": "La Unidad ha recibido la factura"
+            },
+            {
+                "flujo": "ordinario",
+                "nombre": "Conformada",
+                "nombrePublico": "Registrada en RCF",
+                "codigo": "2300",
+                "descripcion": "La Unidad Tramitadora ha aceptado el pago de la factura remitida"
+            },
+            {
+                "flujo": "ordinario",
+                "nombre": "Contabilizada la obligación reconocida",
+                "nombrePublico": "Contabilizada la obligación reconocida",
+                "codigo": "2400",
+                "descripcion": "Contabilizada la obligación reconocida"
+            },
+            {
+                "flujo": "ordinario",
+                "nombre": "Pagada",
+                "nombrePublico": "Pagada",
+                "codigo": "2500",
+                "descripcion": "Factura pagada"
+            },
+            {
+                "flujo": "ordinario",
+                "nombre": "Rechazada",
+                "nombrePublico": "Rechazada",
+                "codigo": "2600",
+                "descripcion": "La Unidad rechaza la factura"
+            },
+            {
+                "flujo": "ordinario",
+                "nombre": "Anulada",
+                "nombrePublico": "Anulada",
+                "codigo": "3100",
+                "descripcion": "La Unidad aprueba la propuesta de anulación"
+            },
+            {
+                "flujo": "anulación",
+                "nombre": "No solicitada anulación",
+                "nombrePublico": "No solicitada anulación",
+                "codigo": "4100",
+                "descripcion": "No solicitada anulación"
+            },
+            {
+                "flujo": "anulación",
+                "nombre": "Solicitada anulación",
+                "nombrePublico": "Solicitada anulación",
+                "codigo": "4200",
+                "descripcion": "Solicitada anulación"
+            },
+            {
+                "flujo": "anulación",
+                "nombre": "Rechazada anulación",
+                "nombrePublico": "Rechazada anulación",
+                "codigo": "4400",
+                "descripcion": "Rechazada anulación"
+            },
+            {
+                "flujo": "anulación",
+                "nombre": "Aceptada anulación",
+                "nombrePublico": "Aceptada anulación",
+                "codigo": "4300",
+                "descripcion": "Aceptada anulación"
+            }
+        ]
+    }
+}

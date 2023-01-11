@@ -2,10 +2,12 @@
 Módulo con funciones de apoyo a la CLI
 """
 
+import csv
 import sys
 from pathlib import Path
 from typing import Any
 
+import typer
 from rich.console import Console
 from rich.theme import Theme
 
@@ -73,3 +75,41 @@ def get_config_path() -> Path:
         return home / "Library/Application Support/aapp2face"
     else:
         return home / "aapp2face"
+
+
+def verify_export(export: Path | None) -> None:
+    """Aborta la ejecución si no existe el archivo de exportación.
+
+    Parameters
+    ----------
+    export : Path
+        Archivo de exportación a comprobar
+    """
+
+    if export and export.exists():
+        err_rprint(f"[error]Error:[/error] El archivo [data]{export}[/data] ya existe.")
+        raise typer.Abort()
+
+
+def export_data(
+    data: list[dict], filename: Path, exclude_fields: list[str] = []
+) -> None:
+    """Exporta una lista de diccionarios a un archivo en formato CSV.
+
+    Parameters
+    ----------
+    data : list[dict]
+        Lista de diccionarios a imprimir.
+    filename : Path
+        Archivo destino de la exportación.
+    exclude_fields : list[str], optional
+        Lista de campos a excluir en la exportación. Por defecto ninguno.
+    """
+
+    fieldnames = [field for field in data[0].keys() if field not in exclude_fields]
+    with open(filename, "x", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=";")
+        writer.writeheader()
+        for d in data:
+            row = {k: v for k, v in d.items() if k not in exclude_fields}
+            writer.writerow(row)
