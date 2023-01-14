@@ -1,0 +1,39 @@
+{
+    "resultado": {
+        "codigo": "0",
+        "descripcion": "Correcto",
+        "codigoSeguimiento": null
+    },
+    "relaciones": {
+        "OGUTOC": [
+            {
+                "organoGestor": {
+                    "nombre": "Unidad Dir Pruebas 10 (OgP00000010)",
+                    "codigo": "P00000010"
+                },
+                "unidadTramitadora": {
+                    "nombre": "Unidad Dir Pruebas 10 (UtP00000010)",
+                    "codigo": "P00000010"
+                },
+                "oficinaContable": {
+                    "nombre": "Unidad Dir Pruebas 10 (OcP00000010)",
+                    "codigo": "P00000010"
+                }
+            },
+            {
+                "organoGestor": {
+                    "nombre": "Unidad Dir Pruebas 10 (OgP00000010)",
+                    "codigo": "P00000010"
+                },
+                "unidadTramitadora": {
+                    "nombre": "Unidad Dir Pruebas 12 (UtP00000012)",
+                    "codigo": "P00000012"
+                },
+                "oficinaContable": {
+                    "nombre": "Unidad Dir Pruebas 10 (OcP00000010)",
+                    "codigo": "P00000010"
+                }
+            }
+        ]
+    }
+}

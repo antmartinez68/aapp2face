@@ -162,6 +162,64 @@ def estados(
     rprint(f"[info]{len(estados)}[/info] estados disponibles")
 
 
+@app.command()
+def unidades(
+    ctx: typer.Context,
+    export: Optional[Path] = typer.Option(
+        None,
+        "--export",
+        "-e",
+        show_default=False,
+        help="Exporta la salida a un archivo CSV.",
+    ),
+):
+    """Lista las relaciones OG-UT-OC asociadas al RCF.
+
+    Las relaciones OG-UT-OC obtenidas son las asociadas al RCF que firma
+    la petición.
+    """
+
+    verify_export(export)
+
+    try:
+        relaciones = ctx.obj.face_connection.consultar_unidades()
+    except exceptions.FACeManagementException as exc:
+        err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
+        raise typer.Exit(4)
+
+    if export:
+        data = []
+        for relacion in relaciones:
+            dict_relacion = {
+                "organo_gestor_codigo": relacion.organo_gestor.codigo,
+                "organo_gestor_nombre": relacion.organo_gestor.nombre,
+                "unidad_tramitadora_codigo": relacion.unidad_tramitadora.codigo,
+                "unidad_tramitadora_nombre": relacion.unidad_tramitadora.nombre,
+                "oficina_contable_codigo": relacion.oficina_contable.codigo,
+                "oficina_contable_nombre": relacion.oficina_contable.nombre,
+            }
+            data.append(dict_relacion)
+        export_data(data, export)
+    else:
+        for relacion in relaciones:
+            rprint(f"[field]Órgano gestor:[/field]")
+            rprint(f"  [field]Código:[/field] {relacion.organo_gestor.codigo}")
+            rprint(f"  [field]Nombre:[/field] {relacion.organo_gestor.nombre}")
+
+            rprint(f"[field]Unidad tramitadora:[/field]")
+            rprint(f"  [field]Código:[/field] {relacion.unidad_tramitadora.codigo}")
+            rprint(f"  [field]Nombre:[/field] {relacion.unidad_tramitadora.nombre}")
+
+            rprint(f"[field]Oficina contable:[/field]")
+            rprint(f"  [field]Código:[/field] {relacion.oficina_contable.codigo}")
+            rprint(f"  [field]Nombre:[/field] {relacion.oficina_contable.nombre}")
+            print("")
+
+    rprint(
+        f"[info]{len(relaciones)}[/info] relaciones {'exportadas' if export else 'disponibles'}"
+    )
+
+
 def version_callback(value: bool):
     """Callback de mostrado de la versión"""
 
