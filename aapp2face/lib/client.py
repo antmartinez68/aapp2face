@@ -36,3 +36,9 @@ class FACeClient(ABC):
         """Consultar la lista de estados que maneja FACe."""
 
         pass
+
+    @abstractmethod
+    def consultar_unidades(self):
+        """Consultar las relaciones OG-UT-OC asociadas al RCF."""
+
+        pass

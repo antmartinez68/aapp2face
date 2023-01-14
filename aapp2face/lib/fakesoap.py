@@ -63,3 +63,8 @@ class FACeFakeSoapClient(FACeClient):
         """Simula una llamada al método `consultarEstados` en FACe."""
 
         return self._import_response("consultarEstados")
+
+    def consultar_unidades(self):
+        """Simula una llamada al método `consultarUnidades` en FACe."""
+
+        return self._import_response("consultarUnidades")

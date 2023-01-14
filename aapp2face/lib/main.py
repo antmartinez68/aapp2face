@@ -3,7 +3,7 @@ Módulo principal de la librería AAPP2FACe
 """
 
 from .client import FACeClient
-from .objects import Estado
+from .objects import Estado, Relacion, UnidadDir3
 
 
 class FACeConnection:
@@ -33,5 +33,33 @@ class FACeConnection:
                         estado["codigo"],
                         estado["descripcion"],
                     )
+                )
+        return result
+
+    def consultar_unidades(self) -> list[Relacion]:
+        """Devuelve las relaciones OG-UT-OC asociadas al RCF.
+
+        Las relaciones OG-UT-OC obtenidas son las asociadas al RCF que
+        firma la petición.
+        """
+
+        response = self._client.consultar_unidades()
+        result: list[Relacion] = []
+        if response["relaciones"] is not None:
+            for relacion in response["relaciones"]["OGUTOC"]:
+                organo_gestor = UnidadDir3(
+                    relacion["organoGestor"]["nombre"],
+                    relacion["organoGestor"]["codigo"],
+                )
+                unidad_tramitadora = UnidadDir3(
+                    relacion["unidadTramitadora"]["nombre"],
+                    relacion["unidadTramitadora"]["codigo"],
+                )
+                oficina_contable = UnidadDir3(
+                    relacion["oficinaContable"]["nombre"],
+                    relacion["oficinaContable"]["codigo"],
+                )
+                result.append(
+                    Relacion(organo_gestor, unidad_tramitadora, oficina_contable)
                 )
         return result

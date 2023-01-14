@@ -33,3 +33,16 @@ class Estado:
     nombre_publico: str
     codigo: str
     descripcion: str
+
+
+@dataclass
+class UnidadDir3:
+    nombre: str
+    codigo: str
+
+
+@dataclass
+class Relacion:
+    organo_gestor: UnidadDir3
+    unidad_tramitadora: UnidadDir3
+    oficina_contable: UnidadDir3

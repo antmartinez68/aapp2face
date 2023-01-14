@@ -127,3 +127,12 @@ class FACeSoapClient(FACeClient):
         """
 
         return self._llamar_metodo_soap("consultarEstados")
+
+    def consultar_unidades(self):
+        """Devuelve la respuesta del método SOAP `consultarUnidades`.
+
+        Este método permite consultar las relaciones OG-UT-OC asociadas
+        al RCF que firma la petición SOAP.
+        """
+
+        return self._llamar_metodo_soap("consultarUnidades")
