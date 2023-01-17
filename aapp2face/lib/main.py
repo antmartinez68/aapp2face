@@ -3,7 +3,7 @@ Módulo principal de la librería AAPP2FACe
 """
 
 from .client import FACeClient
-from .objects import Estado, Relacion, UnidadDir3
+from .objects import Estado, NuevaFactura, Relacion, UnidadDir3
 
 
 class FACeConnection:
@@ -62,4 +62,36 @@ class FACeConnection:
                 result.append(
                     Relacion(organo_gestor, unidad_tramitadora, oficina_contable)
                 )
+        return result
+
+    def solicitar_nuevas_facturas(
+        self, oficina_contable: str = ""
+    ) -> list[NuevaFactura]:
+        """Devuelve las facturas que se encuentran en estado "registrada".
+
+        El resultado está limitado a un máximo de 500 facturas. Las
+        facturas deben ser procesadas para que entren el resto de
+        facturas encoladas.
+
+        Parameters
+        ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable. Si no se pasa valor
+            retornará un listado de las facturas del RCF.
+        """
+
+        response = self._client.solicitar_nuevas_facturas(oficina_contable)
+        result: list[NuevaFactura] = []
+        if response["facturas"] is not None:
+            for factura in response["facturas"]["solicitarNuevasFacturas"]:
+                result.append(
+                    NuevaFactura(
+                        factura["numeroRegistro"],
+                        factura["oficinaContable"],
+                        factura["organoGestor"],
+                        factura["unidadTramitadora"],
+                        factura["fechaHoraRegistro"],
+                    )
+                )
+
         return result

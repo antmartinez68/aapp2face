@@ -46,3 +46,12 @@ class Relacion:
     organo_gestor: UnidadDir3
     unidad_tramitadora: UnidadDir3
     oficina_contable: UnidadDir3
+
+
+@dataclass
+class NuevaFactura:
+    numero_registro: str
+    oficina_contable: str
+    organo_gestor: str
+    unidad_tramitadora: str
+    fecha_hora_registro: str

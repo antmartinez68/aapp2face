@@ -42,3 +42,9 @@ class FACeClient(ABC):
         """Consultar las relaciones OG-UT-OC asociadas al RCF."""
 
         pass
+
+    @abstractmethod
+    def solicitar_nuevas_facturas(self, oficina_contable: str):
+        """Consultar la lista de facturas en estado 'registrada'."""
+
+        pass

@@ -136,3 +136,20 @@ class FACeSoapClient(FACeClient):
         """
 
         return self._llamar_metodo_soap("consultarUnidades")
+
+    def solicitar_nuevas_facturas(self, oficina_contable: str):
+        """Devuelve la respuesta del método SOAP `solicitarNuevasFacturas`.
+
+        Este método retorna la lista de facturas que se encuentran en
+        estado "registrada" y que deberán ser recuperadas. El resultado
+        está limitado a un máximo de 500 facturas. Las facturas deben
+        ser procesadas para que entren el resto de facturas encoladas.
+
+        Parameters
+        ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable. Si no se pasa valor
+            retornará un listado de las facturas del RCF.
+        """
+
+        return self._llamar_metodo_soap("solicitarNuevasFacturas", oficina_contable)

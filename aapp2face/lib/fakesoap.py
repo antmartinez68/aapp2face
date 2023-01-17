@@ -68,3 +68,13 @@ class FACeFakeSoapClient(FACeClient):
         """Simula una llamada al método `consultarUnidades` en FACe."""
 
         return self._import_response("consultarUnidades")
+
+    def solicitar_nuevas_facturas(self, oficina_contable: str):
+        """Simula una llamada al método `consultarFactura` en FACe."""
+
+        if oficina_contable == "":
+            filename_prefix = "solicitarNuevasFacturas"
+        else:
+            filename_prefix = f"solicitarNuevasFacturas.{oficina_contable}"
+
+        return self._import_response(filename_prefix)
