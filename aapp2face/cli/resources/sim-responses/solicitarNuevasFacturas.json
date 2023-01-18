@@ -1,0 +1,25 @@
+{
+    "resultado": {
+        "codigo": "0",
+        "descripcion": "Correcto",
+        "codigoSeguimiento": null
+    },
+    "facturas": {
+        "solicitarNuevasFacturas": [
+            {
+                "numeroRegistro": "NUMERO_REGISTRO",
+                "oficinaContable": "P00000010",
+                "organoGestor": "P00000010",
+                "unidadTramitadora": "P00000010",
+                "fechaHoraRegistro": "2014-03-19 10:57:38"
+            },
+            {
+                "numeroRegistro": "NUMERO_REGISTRO_2",
+                "oficinaContable": "P00000010",
+                "organoGestor": "P00000010",
+                "unidadTramitadora": "P00000010",
+                "fechaHoraRegistro": "2014-03-19 11:05:51"
+            }
+        ]
+    }
+}

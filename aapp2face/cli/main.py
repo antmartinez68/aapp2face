@@ -17,6 +17,7 @@ from aapp2face import (
     exceptions,
 )
 
+from . import facturas
 from .helpers import err_rprint, export_data, get_config_path, rprint, verify_export
 
 # Config constants
@@ -32,6 +33,7 @@ DEBUG_LOG_DIR = "."
 FAKE_RESPONSES_DIR = "."
 
 app = typer.Typer(no_args_is_help=True)
+app.add_typer(facturas.app, name="facturas")
 
 
 class AppData:
