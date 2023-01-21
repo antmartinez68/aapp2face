@@ -3,7 +3,14 @@ Módulo principal de la librería AAPP2FACe
 """
 
 from .client import FACeClient
-from .objects import Estado, NuevaFactura, Relacion, UnidadDir3
+from .objects import (
+    AnexoFactura,
+    DescargaFactura,
+    Estado,
+    NuevaFactura,
+    Relacion,
+    UnidadDir3,
+)
 
 
 class FACeConnection:
@@ -95,3 +102,37 @@ class FACeConnection:
                 )
 
         return result
+
+    def descargar_factura(self, numero_registro: str) -> DescargaFactura:
+        """Descarga una factura.
+
+        Después de llamar a este método, y una vez comprobada la
+        correcta recepción de la factura, el RCF debe llamar al método
+        `confirmar_descarga_factura`. Este método de descarga de
+        facturas únicamente puede ser invocado para facturas en estado
+        "Registrada". En otros casos el servicio web reportará un error.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe a descargar.
+        """
+
+        response = self._client.descargar_factura(numero_registro)
+        factura = response["factura"]
+
+        anexos: list[AnexoFactura] = []
+        for anexo in factura["anexos"]["AnexoFile"]:
+            anexos.append(AnexoFactura(anexo["anexo"], anexo["nombre"], anexo["mime"]))
+
+        return DescargaFactura(
+            factura["numero"],
+            factura["serie"],
+            factura["importe"],
+            factura["proveedor"],
+            factura["nombre"],
+            factura["factura"],
+            factura["mime"],
+            anexos,
+        )

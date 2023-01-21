@@ -153,3 +153,22 @@ class FACeSoapClient(FACeClient):
         """
 
         return self._llamar_metodo_soap("solicitarNuevasFacturas", oficina_contable)
+
+    def descargar_factura(self, numero_registro: str):
+        """Devuelve la respuesta del método SOAP `descargarFactura`.
+
+        Este servicio permite descargar las facturas. Después de llamar
+        a este servicio, y una vez comprobada la correcta recepción de
+        la factura, el RCF debe llamar al servicio
+        "confirmarDescargaFactura". El servicio de descarga de facturas,
+        únicamente puede ser invocado para facturas en estado
+        "Registrada". En otros casos el sistema generará un error.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe a descargar.
+        """
+
+        return self._llamar_metodo_soap("descargarFactura", numero_registro)

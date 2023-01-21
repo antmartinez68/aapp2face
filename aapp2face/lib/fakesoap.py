@@ -78,3 +78,8 @@ class FACeFakeSoapClient(FACeClient):
             filename_prefix = f"solicitarNuevasFacturas.{oficina_contable}"
 
         return self._import_response(filename_prefix)
+
+    def descargar_factura(self, numero_registro: str):
+        """Simula una llamada al método `descargarFactura` en FACe."""
+
+        return self._import_response(f"descargarFactura.{numero_registro}")
