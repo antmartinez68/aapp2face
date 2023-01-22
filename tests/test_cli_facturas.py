@@ -29,3 +29,20 @@ def test_nuevas():
     )
     assert result.exit_code == 0
     assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_descargar_factura_ya_confirmada():
+    numero_registro = "1111"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        f"Error 502: La factura ya ha sido recibida en destino por el RCF, no se puede descargar ('{numero_registro}')."
+        ""
+        "0 facturas descargadas"
+    )
+
+    result = runner.invoke(
+        app,
+        ["--fake-set", TEST_RESPONSES_PATH, "facturas", "descargar", numero_registro],
+    )
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")

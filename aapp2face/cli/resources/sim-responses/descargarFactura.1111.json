@@ -1,0 +1,17 @@
+{
+    "resultado": {
+        "codigo": "502",
+        "descripcion": "La factura ya ha sido recibida en destino por el RCF, no se puede descargar",
+        "codigoSeguimiento": null
+    },
+    "factura": {
+        "numero": null,
+        "serie": null,
+        "importe": null,
+        "proveedor": null,
+        "nombre": null,
+        "factura": null,
+        "mime": null,
+        "anexos": null
+    }
+}
