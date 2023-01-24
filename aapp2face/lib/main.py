@@ -5,6 +5,7 @@ Módulo principal de la librería AAPP2FACe
 from .client import FACeClient
 from .objects import (
     AnexoFactura,
+    ConfirmaDescargaFactura,
     DescargaFactura,
     Estado,
     NuevaFactura,
@@ -135,4 +136,31 @@ class FACeConnection:
             factura["factura"],
             factura["mime"],
             anexos,
+        )
+
+    def confirmar_descarga_factura(
+        self, oficina_contable: str, numero_registro: str, codigo_rcf: str
+    ):
+        """Confirma la descarga de una factura.
+
+        Parameters
+        ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable.
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe para la que quiere
+            cambiar su RCF.
+        codigo_rcf : str
+            Código del RCF a asignar a la factura.
+        """
+
+        response = self._client.confirmar_descarga_factura(
+            oficina_contable, numero_registro, codigo_rcf
+        )
+
+        return ConfirmaDescargaFactura(
+            response["factura"]["numeroRegistro"],
+            response["factura"]["oficinaContable"],
+            response["factura"]["codigo"],
         )

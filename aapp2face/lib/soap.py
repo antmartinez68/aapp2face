@@ -172,3 +172,33 @@ class FACeSoapClient(FACeClient):
         """
 
         return self._llamar_metodo_soap("descargarFactura", numero_registro)
+
+    def confirmar_descarga_factura(
+        self, oficina_contable: str, numero_registro: str, codigo_rcf: str
+    ):
+        """Devuelve la respuesta del método SOAP `confirmarDescargaFactura`.
+
+        Este servicio es el complementario al servicio descargar
+        factura, es decir, el RCF deberá solicitar
+        "confirmarDescargaFactura" para cada "descargarFactura" que se
+        haya completado con éxito, de forma que la plataforma FACe pueda
+        realizar todas las acciones relacionadas con la descarga de
+        factura por parte del RCF.
+
+        Este método actualiza la factura al estado 1300 automáticamente.
+
+        Parameters
+        ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable.
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe para la que quiere
+            consultarse su RCF.
+        codigo_rcf : str
+            Código del RCF a asignar a la factura.
+        """
+
+        return self._llamar_metodo_soap(
+            "confirmarDescargaFactura", oficina_contable, numero_registro, codigo_rcf
+        )

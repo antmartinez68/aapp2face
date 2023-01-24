@@ -54,3 +54,11 @@ class FACeClient(ABC):
         """Descarga de una factura."""
 
         pass
+
+    @abstractmethod
+    def confirmar_descarga_factura(
+        self, oficina_contable: str, numero_registro: str, codigo_rcf: str
+    ):
+        """Confirmar descarga de una factura."""
+
+        pass

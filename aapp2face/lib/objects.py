@@ -115,3 +115,10 @@ class DescargaFactura:
             mode = "xb"
         with open(Path(path, self.nombre), mode) as file:
             file.write(decoded_data)
+
+
+@dataclass
+class ConfirmaDescargaFactura:
+    numero_registro: str
+    oficina_contable: str
+    codigo: str
