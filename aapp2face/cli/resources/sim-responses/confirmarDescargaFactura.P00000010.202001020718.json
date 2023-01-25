@@ -1,0 +1,12 @@
+{
+    "resultado": {
+        "codigo": "0",
+        "descripcion": "Correcto",
+        "codigoSeguimiento": null
+    },
+    "factura": {
+        "numeroRegistro": "202001020718",
+        "oficinaContable": "P00000010",
+        "codigo": "1300"
+    }
+}

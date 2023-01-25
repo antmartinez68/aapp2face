@@ -9,7 +9,7 @@ from typing import Optional
 import typer
 
 from aapp2face import exceptions
-from aapp2face.lib.objects import NuevaFactura
+from aapp2face.lib.objects import ConfirmaDescargaFactura, NuevaFactura
 
 from .helpers import err_rprint, export_data, rprint, verify_export
 
@@ -179,3 +179,48 @@ def descargar(
             rprint(f"[field]Anexos:[/field]        {factura['lista_anexos']}\n")
 
     rprint(f"[info]{len(facturas)}[/info] facturas descargadas")
+
+
+@app.command()
+def confirmar(
+    ctx: typer.Context,
+    oficina_contable: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Código DIR3 de la Oficina Contable.",
+    ),
+    numero_registro: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Número de registro de la factura a confirmar.",
+    ),
+    codigo_rcf: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Código RCF que se asignará a la factura.",
+    ),
+):
+    """Confirma la descarga de una factura.
+
+    Tras la descarga de una factura debe utilizarse este comando para
+    confirmar que el proceso de descarga se ha realizado con éxito, de
+    forma que la plataforma FACe pueda realizar todas las acciones
+    relacionadas con la descarga de la factura por parte del RCF.
+
+    Tras confirmar la descarga de una factura, su estado queda
+    actualizado automáticamente a 1300.
+    """
+
+    try:
+        confirmacion: ConfirmaDescargaFactura = (
+            ctx.obj.face_connection.confirmar_descarga_factura(
+                oficina_contable, numero_registro, codigo_rcf
+            )
+        )
+    except exceptions.FACeManagementException as exc:
+        err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
+        raise typer.Exit(4)
+
+    rprint(f"[field]Oficina contable:[/field]   {confirmacion.oficina_contable}")
+    rprint(f"[field]Número de registro:[/field] {confirmacion.numero_registro}")
+    rprint(f"[field]Código de estado:[/field]   {confirmacion.codigo}")
