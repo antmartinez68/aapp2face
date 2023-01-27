@@ -6,6 +6,8 @@ from .client import FACeClient
 from .objects import (
     AnexoFactura,
     ConfirmaDescargaFactura,
+    ConsultarEstadoFactura,
+    ConsultarFactura,
     DescargaFactura,
     Estado,
     NuevaFactura,
@@ -164,3 +166,33 @@ class FACeConnection:
             response["factura"]["oficinaContable"],
             response["factura"]["codigo"],
         )
+
+    def consultar_factura(self, numero_registro: str) -> ConsultarFactura:
+        """Devuelve el estado de una factura.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe para la que quiere
+            consultarse su estado.
+        """
+
+        response = self._client.consultar_factura(numero_registro)
+        factura = response["factura"]
+
+        tramitacion = ConsultarEstadoFactura(
+            factura["tramitacion"]["codigo"],
+            factura["tramitacion"]["descripcion"],
+            factura["tramitacion"]["motivo"],
+        )
+
+        anulacion = ConsultarEstadoFactura(
+            factura["anulacion"]["codigo"],
+            factura["anulacion"]["descripcion"],
+            factura["anulacion"]["motivo"],
+        )
+
+        result = ConsultarFactura(factura["numeroRegistro"], tramitacion, anulacion)
+
+        return result

@@ -202,3 +202,18 @@ class FACeSoapClient(FACeClient):
         return self._llamar_metodo_soap(
             "confirmarDescargaFactura", oficina_contable, numero_registro, codigo_rcf
         )
+
+    def consultar_factura(self, numero_registro: str):
+        """Devuelve la respuesta del método SOAP `consultarRegistro`.
+
+        Este método permite consultar el estado de una factura.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe para la que quiere
+            consultarse su estado.
+        """
+
+        return self._llamar_metodo_soap("consultarFactura", numero_registro)

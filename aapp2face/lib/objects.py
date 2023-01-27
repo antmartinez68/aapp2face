@@ -122,3 +122,17 @@ class ConfirmaDescargaFactura:
     numero_registro: str
     oficina_contable: str
     codigo: str
+
+
+@dataclass
+class ConsultarEstadoFactura:
+    codigo: str
+    descripcion: str
+    motivo: str
+
+
+@dataclass
+class ConsultarFactura:
+    numero_registro: str
+    tramitacion: ConsultarEstadoFactura
+    anulacion: ConsultarEstadoFactura

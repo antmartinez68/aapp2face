@@ -92,3 +92,8 @@ class FACeFakeSoapClient(FACeClient):
         return self._import_response(
             f"confirmarDescargaFactura.{oficina_contable}.{numero_registro}"
         )
+
+    def consultar_factura(self, numero_registro: str):
+        """Simula una llamada al método `consultarFactura` en FACe."""
+
+        return self._import_response(f"consultarListadoFacturas.{numero_registro}")
