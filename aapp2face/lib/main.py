@@ -10,6 +10,7 @@ from .objects import (
     ConsultarFactura,
     DescargaFactura,
     Estado,
+    FACeItemResult,
     NuevaFactura,
     Relacion,
     UnidadDir3,
@@ -194,5 +195,51 @@ class FACeConnection:
         )
 
         result = ConsultarFactura(factura["numeroRegistro"], tramitacion, anulacion)
+
+        return result
+
+    def consultar_listado_facturas(self, numeros_registro: list[str]):
+        """Devuelve el estado de varias facturas.
+
+        El servicio web limita a un máximo de 500 facturas la consulta.
+
+        Parameters
+        ----------
+        numeros_registro : list[str]
+            Números de registro en el REC, identificadores únicos de las
+            facturas dentro de la plataforma FACe para las que quiere
+            consultarse su estado.
+        """
+
+        response = self._client.consultar_listado_facturas(numeros_registro)
+        result: list[str] = []
+        if response["facturas"] is not None:
+            for factura in response["facturas"]["consultarListadoFacturas"]:
+                if factura["codigo"] == "0":
+                    tramitacion = ConsultarEstadoFactura(
+                        factura["factura"]["tramitacion"]["codigo"],
+                        factura["factura"]["tramitacion"]["descripcion"],
+                        factura["factura"]["tramitacion"]["motivo"],
+                    )
+
+                    anulacion = ConsultarEstadoFactura(
+                        factura["factura"]["anulacion"]["codigo"],
+                        factura["factura"]["anulacion"]["descripcion"],
+                        factura["factura"]["anulacion"]["motivo"],
+                    )
+
+                    result.append(
+                        ConsultarFactura(
+                            factura["factura"]["numeroRegistro"], tramitacion, anulacion
+                        )
+                    )
+                else:
+                    result.append(
+                        FACeItemResult(
+                            factura["codigo"],
+                            factura["descripcion"],
+                            factura["factura"]["numeroRegistro"],
+                        )
+                    )
 
         return result

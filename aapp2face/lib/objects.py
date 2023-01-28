@@ -136,3 +136,23 @@ class ConsultarFactura:
     numero_registro: str
     tramitacion: ConsultarEstadoFactura
     anulacion: ConsultarEstadoFactura
+
+
+@dataclass
+class FACeItemResult:
+    """Clase para resultados por elemento en arrays devueltos por FACe.
+
+    Attributes
+    ----------
+        codigo : str
+            Código de resultado devuelto por FACe.
+        descripcion : str
+            Descripción asociada al resultado devuelto por FACe.
+        id : str
+            Identificador de referencia en la operación que provocó el
+            resultado. Por ejemplo un número de registro de una factura.
+    """
+
+    codigo: str
+    descripcion: str
+    id: str

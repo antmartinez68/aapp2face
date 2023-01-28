@@ -68,3 +68,9 @@ class FACeClient(ABC):
         """Consultar el estado de una factura."""
 
         pass
+
+    @abstractmethod
+    def consultar_listado_facturas(self, numeros_registro: list[str]):
+        """Consultar el estado de varias facturas."""
+
+        pass

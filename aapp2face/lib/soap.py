@@ -217,3 +217,23 @@ class FACeSoapClient(FACeClient):
         """
 
         return self._llamar_metodo_soap("consultarFactura", numero_registro)
+
+    def consultar_listado_facturas(self, numeros_registro: list[str]):
+        """Devuelve la respuesta del método SOAP `consultarListadoFacturas`.
+
+        Este método permite consultar el estado de varias facturas. El
+        servicio web limita a un máximo de 500 facturas la consulta.
+
+        Parameters
+        ----------
+        numeros_registro : list[str]
+            Números de registro en el REC, identificadores únicos de las
+            facturas dentro de la plataforma FACe para las que quiere
+            consultarse su estado.
+        """
+
+        return self._llamar_metodo_soap(
+            "consultarListadoFacturas",
+            numeros_registro,
+            array_type="ns0:ArrayOfConsultarListadoFacturasRequest",
+        )
