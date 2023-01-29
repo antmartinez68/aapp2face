@@ -1,0 +1,37 @@
+{
+    "resultado": {
+        "codigo": "0",
+        "descripcion": "Correcto",
+        "codigoSeguimiento": null
+    },
+    "facturas": {
+        "consultarListadoFacturas": [
+            {
+                "codigo": "0",
+                "descripcion": "Correcto",
+                "factura": {
+                    "numeroRegistro": "202001020718",
+                    "tramitacion": {
+                        "codigo": "1200",
+                        "descripcion": "La factura ha sido registrada en el registro electrónico REC",
+                        "motivo": null
+                    },
+                    "anulacion": {
+                        "codigo": "4100",
+                        "descripcion": "No solicitada anulación",
+                        "motivo": null
+                    }
+                }
+            },
+            {
+                "codigo": "511",
+                "descripcion": "La factura no existe o no tiene permisos",
+                "factura": {
+                    "numeroRegistro": "9999",
+                    "tramitacion": null,
+                    "anulacion": null
+                }
+            }
+        ]
+    }
+}

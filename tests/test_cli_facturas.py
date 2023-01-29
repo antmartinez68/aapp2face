@@ -98,3 +98,52 @@ def test_confirmar_descarga_factura_error():
     )
     assert result.exit_code == 4
     assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_consultar_facturas():
+    numero_registro_1 = "202001020718"
+    numero_registro_2 = "9999"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        f"Número registro: {numero_registro_1}"
+        "Tramitación:"
+        "  Código:        1200"
+        "  Descripción:   La factura ha sido registrada en el registro electrónico REC"
+        "  Motivo:        None"
+        "Anulación:"
+        "  Código:        4100"
+        "  Descripción:   No solicitada anulación"
+        "  Motivo:        None"
+        ""
+        f"Número registro: {numero_registro_2}"
+        "  Error: 511 La factura no existe o no tiene permisos."
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "facturas",
+            "consultar",
+            numero_registro_1,
+            numero_registro_2,
+        ],
+    )
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_consultar_facturas_error():
+    numero_registro = "9999"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        f"Error 555: No existe archivo con respuesta para simular la petición ('consultarListadoFacturas.{numero_registro}.json')."
+    )
+
+    result = runner.invoke(
+        app,
+        ["--fake-set", TEST_RESPONSES_PATH, "facturas", "consultar", numero_registro],
+    )
+    assert result.exit_code == 4
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")

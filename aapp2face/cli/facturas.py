@@ -9,7 +9,11 @@ from typing import Optional
 import typer
 
 from aapp2face import exceptions
-from aapp2face.lib.objects import ConfirmaDescargaFactura, NuevaFactura
+from aapp2face.lib.objects import (
+    ConfirmaDescargaFactura,
+    ConsultarFactura,
+    NuevaFactura,
+)
 
 from .helpers import err_rprint, export_data, rprint, verify_export
 
@@ -224,3 +228,50 @@ def confirmar(
     rprint(f"[field]Oficina contable:[/field]   {confirmacion.oficina_contable}")
     rprint(f"[field]Número de registro:[/field] {confirmacion.numero_registro}")
     rprint(f"[field]Código de estado:[/field]   {confirmacion.codigo}")
+
+
+@app.command()
+def consultar(
+    ctx: typer.Context,
+    export: Optional[Path] = typer.Option(
+        None,
+        "--export",
+        "-e",
+        show_default=False,
+        help="Exporta la salida a un archivo CSV.",
+    ),
+    numeros_registro: list[str] = typer.Argument(
+        ...,
+        show_default=False,
+        help="Números de registro de las facturas a consultar.",
+    ),
+):
+    """Consulta el estado de facturas.
+
+    Consulta el estado de las facturas cuyos identificadores son
+    facilitados.
+    """
+
+    try:
+        facturas = ctx.obj.face_connection.consultar_listado_facturas(numeros_registro)
+    except exceptions.FACeManagementException as exc:
+        err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
+        raise typer.Exit(4)
+
+    for factura in facturas:
+        if isinstance(factura, ConsultarFactura):
+            rprint(
+                f"[field]Número registro:[/field] [info]{factura.numero_registro}[/info]"
+            )
+            rprint(f"[field]Tramitación:[/field]")
+            rprint(f"[field]  Código:[/field]        {factura.tramitacion.codigo}")
+            rprint(f"[field]  Descripción:[/field]   {factura.tramitacion.descripcion}")
+            rprint(f"[field]  Motivo:[/field]        {factura.tramitacion.motivo}")
+            rprint(f"[field]Anulación:[/field]")
+            rprint(f"[field]  Código:[/field]        {factura.anulacion.codigo}")
+            rprint(f"[field]  Descripción:[/field]   {factura.anulacion.descripcion}")
+            rprint(f"[field]  Motivo:[/field]        {factura.anulacion.motivo}")
+        else:
+            rprint(f"[field]Número registro:[/field] [info]{factura.id}[/info]")
+            rprint(f"  [error]Error:[/error] {factura.codigo} {factura.descripcion}.")
+        print()
