@@ -156,3 +156,19 @@ class FACeItemResult:
     codigo: str
     descripcion: str
     id: str
+
+
+@dataclass
+class CambiarEstadoFactura:
+    """Clase para respuesta FACe al cambiar estado de una factura.
+
+    Attributes
+    ----------
+        numero_registro : str
+            Número de registro de la factura dentro de FACe.
+        codigo : str
+            Identificador del código de estado asignado.
+    """
+
+    numero_registro: str
+    codigo: str

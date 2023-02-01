@@ -237,3 +237,39 @@ class FACeSoapClient(FACeClient):
             numeros_registro,
             array_type="ns0:ArrayOfConsultarListadoFacturasRequest",
         )
+
+    def cambiar_estado_factura(
+        self, oficina_contable: str, numero_registro: str, codigo: str, comentario: str
+    ):
+        """Devuelve la respuesta del método SOAP `cambiarEstadoFactura`.
+
+        Este método permite cambiar el estado de una factura.
+
+        Este método permite cambiar el estado de una factura. Los
+        estados 1300 y 3100 no están permitidos en este método, para
+        ello deben usarse los métodos equivalentes a las peticiones SOAP
+        `confirmarDescargaFactura` y `gestionarSolicitudAnulacion`
+        respectivamente. El estado inicial 1200 tampoco es gestionable
+        por este método.
+
+        Parameters
+        ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable.
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe para la que quiere
+            consultarse su RCF.
+        codigo : str
+            Identificador del código de estado a asignar.
+        comentario : str
+            Comentario asociado al cambio de estado de la factura.
+        """
+
+        return self._llamar_metodo_soap(
+            "cambiarEstadoFactura",
+            oficina_contable,
+            numero_registro,
+            codigo,
+            comentario,
+        )

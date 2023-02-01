@@ -104,3 +104,45 @@ class FACeFakeSoapClient(FACeClient):
         str_numeros_registro = ".".join(numeros_registro)
 
         return self._import_response(f"consultarListadoFacturas.{str_numeros_registro}")
+
+    def cambiar_estado_factura(
+        self, oficina_contable: str, numero_registro: str, codigo: str, comentario: str
+    ):
+        """Simula una llamada al método `cambiarEstadoFactura` en FACe."""
+
+        result = self._import_response(
+            f"cambiarEstadoFactura.{oficina_contable}.{numero_registro}"
+        )
+
+        # Simulación de algunos de los códigos de estado que provocan error
+        estados_permitidos = (
+            "1200",
+            "1300",
+            "1400",
+            "2100",
+            "2300",
+            "2400",
+            "2500",
+            "2600",
+            "3100",
+            "4100",
+            "4200",
+            "4300",
+            "4400",
+        )
+
+        if codigo not in estados_permitidos:
+            raise exceptions.FACeManagementException(
+                "405",
+                f"No existe el código de estado {codigo}",
+            )
+
+        if codigo == "1200" or codigo == "3100":
+            raise exceptions.FACeManagementException(
+                "505",
+                "Esta transición no esta permitida a través de este web service",
+            )
+
+        result["factura"]["codigo"] = codigo
+
+        return result

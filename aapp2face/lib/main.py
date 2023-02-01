@@ -5,6 +5,7 @@ Módulo principal de la librería AAPP2FACe
 from .client import FACeClient
 from .objects import (
     AnexoFactura,
+    CambiarEstadoFactura,
     ConfirmaDescargaFactura,
     ConsultarEstadoFactura,
     ConsultarFactura,
@@ -243,3 +244,38 @@ class FACeConnection:
                     )
 
         return result
+
+    def cambiar_estado_factura(
+        self, oficina_contable: str, numero_registro: str, codigo: str, comentario: str
+    ):
+        """Cambia el estado de una factura.
+
+        Los estados 1300 y 3100 no pueden ser asignados mediante este
+        método ya que estos estados son asignados de forma automática al
+        realizar las operaciones de confirmación de descarga de la
+        factura y gestión de la solicitud de anulación respectivamente.
+        El estado inicial 1200 tampoco es gestionable mediante este
+        método.
+
+        Parameters
+        ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable.
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe para la que quiere
+            cambiar su RCF.
+        codigo : str
+            Identificador del código de estado a asignar.
+        comentario : str
+            Comentario asociado al cambio de estado de la factura.
+        """
+
+        response = self._client.cambiar_estado_factura(
+            oficina_contable, numero_registro, codigo, comentario
+        )
+
+        return CambiarEstadoFactura(
+            response["factura"]["numeroRegistro"],
+            response["factura"]["codigo"],
+        )

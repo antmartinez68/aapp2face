@@ -74,3 +74,11 @@ class FACeClient(ABC):
         """Consultar el estado de varias facturas."""
 
         pass
+
+    @abstractmethod
+    def cambiar_estado_factura(
+        self, oficina_contable: str, numero_registro: str, codigo: str, comentario: str
+    ):
+        """Cambiar el estado de una factura."""
+
+        pass
