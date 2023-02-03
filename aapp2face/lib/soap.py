@@ -10,7 +10,7 @@ from lxml import etree
 from zeep.plugins import HistoryPlugin
 
 from .client import FACeClient
-from .objects import FACeResult
+from .objects import FACeResult, PeticionCambiarEstadoFactura
 from .patch import BinarySignatureTimestamp
 
 
@@ -272,4 +272,38 @@ class FACeSoapClient(FACeClient):
             numero_registro,
             codigo,
             comentario,
+        )
+
+    def cambiar_estado_listado_facturas(
+        self, facturas: list[PeticionCambiarEstadoFactura]
+    ):
+        """Devuelve la respuesta del método SOAP `cambiarEstadoListadoFacturas`.
+
+        Este método permite el cambio de estado a múltiples facturas.
+
+        Las restricciones de este método son iguales al método SOAP
+        `cambiarEstadoFactura`. Se permite hasta un máximo de 100
+        facturas en una misma llamada.
+
+        Parameters
+        ----------
+        facturas : list[PeticionCambiarEstadoFactura]
+            Lista de peticiones con los datos de las facturas a cambiar.
+        """
+
+        facturas_dict_list = []
+        for factura in facturas:
+            facturas_dict_list.append(
+                {
+                    "oficinaContable": factura.oficina_contable,
+                    "numeroRegistro": factura.numero_registro,
+                    "codigo": factura.codigo,
+                    "comentario": factura.comentario,
+                }
+            )
+
+        return self._llamar_metodo_soap(
+            "cambiarEstadoListadoFacturas",
+            facturas_dict_list,
+            array_type="ns0:ArrayOfCambiarEstadoListadoFacturaRequest",
         )

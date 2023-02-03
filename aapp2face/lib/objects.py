@@ -172,3 +172,25 @@ class CambiarEstadoFactura:
 
     numero_registro: str
     codigo: str
+
+
+@dataclass
+class PeticionCambiarEstadoFactura:
+    """Clase para peticiones FACe al cambiar estado de un listado de facturas.
+
+    Attributes
+    ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable.
+        numero_registro : str
+            Número de registro de la factura dentro de FACe.
+        codigo : str
+            Identificador del código de estado a asignar.
+        comentario : str
+            Comentario asociado al cambio de estado de la factura.
+    """
+
+    oficina_contable: str
+    numero_registro: str
+    codigo: str
+    comentario: str

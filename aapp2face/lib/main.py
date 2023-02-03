@@ -13,6 +13,7 @@ from .objects import (
     Estado,
     FACeItemResult,
     NuevaFactura,
+    PeticionCambiarEstadoFactura,
     Relacion,
     UnidadDir3,
 )
@@ -279,3 +280,43 @@ class FACeConnection:
             response["factura"]["numeroRegistro"],
             response["factura"]["codigo"],
         )
+
+    def cambiar_estado_listado_facturas(
+        self, facturas: list[PeticionCambiarEstadoFactura]
+    ):
+        """Cambia el estado de múltiples facturas.
+
+        Las restricciones que el servicio web presenta para esta
+        operación son las mismas aplicadas al método
+        `cambiar_estado_factura`.
+
+        El servicio web limita a un máximo de 100 facturas la petición.
+
+        Parameters
+        ----------
+        facturas : list[PeticionCambiarEstadoFactura]
+            Lista de peticiones con los datos de las facturas a cambiar.
+        """
+
+        response = self._client.cambiar_estado_listado_facturas(facturas)
+
+        result: list[CambiarEstadoFactura | FACeItemResult] = []
+        if response["facturas"]["cambiarEstadoListadoFacturas"] is not None:
+            for factura in response["facturas"]["cambiarEstadoListadoFacturas"]:
+                if factura["codigo"] == "0":
+                    result.append(
+                        CambiarEstadoFactura(
+                            factura["factura"]["numeroRegistro"],
+                            factura["factura"]["codigo"],
+                        )
+                    )
+                else:
+                    result.append(
+                        FACeItemResult(
+                            factura["codigo"],
+                            factura["descripcion"],
+                            factura["factura"]["numeroRegistro"],
+                        )
+                    )
+
+        return result

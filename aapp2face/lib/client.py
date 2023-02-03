@@ -5,7 +5,7 @@ Módulo definición de la interfaz FACeClient
 from abc import ABC, abstractmethod
 
 from . import exceptions as excs
-from .objects import FACeResult
+from .objects import FACeResult, PeticionCambiarEstadoFactura
 
 
 class FACeClient(ABC):
@@ -80,5 +80,13 @@ class FACeClient(ABC):
         self, oficina_contable: str, numero_registro: str, codigo: str, comentario: str
     ):
         """Cambiar el estado de una factura."""
+
+        pass
+
+    @abstractmethod
+    def cambiar_estado_listado_facturas(
+        self, facturas: list[PeticionCambiarEstadoFactura]
+    ):
+        """Cambiar el estado de varias facturas."""
 
         pass
