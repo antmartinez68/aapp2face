@@ -147,3 +147,44 @@ def test_consultar_facturas_error():
     )
     assert result.exit_code == 4
     assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_cambiar_estado_listado_facturas():
+    oficina_contable = "P00000010"
+    codigo = "1400"
+    comentario = ""
+    numero_registro_1 = "202001020718"
+    numero_registro_2 = "202001017112"
+    numero_registro_3 = "9999"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        "Número de registro: 202001020718"
+        f"Código de estado:   {codigo}"
+        ""
+        "Número de registro: 202001017112"
+        "  Error: 505 Esta transición no esta permitida a través de este web service."
+        ""
+        "Número de registro: 9999"
+        "  Error: 501 No se han encontrado facturas asociadas de la oficina contable al RCF."
+        ""
+        "1 cambios correctos y 2 errores."
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "facturas",
+            "estado",
+            oficina_contable,
+            codigo,
+            comentario,
+            numero_registro_1,
+            numero_registro_2,
+            numero_registro_3,
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")

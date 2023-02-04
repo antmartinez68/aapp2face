@@ -10,9 +10,11 @@ import typer
 
 from aapp2face import exceptions
 from aapp2face.lib.objects import (
+    CambiarEstadoFactura,
     ConfirmaDescargaFactura,
     ConsultarFactura,
     NuevaFactura,
+    PeticionCambiarEstadoFactura,
 )
 
 from .helpers import err_rprint, export_data, rprint, verify_export
@@ -275,3 +277,76 @@ def consultar(
             rprint(f"[field]Número registro:[/field] [info]{factura.id}[/info]")
             rprint(f"  [error]Error:[/error] {factura.codigo} {factura.descripcion}.")
         print()
+
+
+@app.command()
+def estado(
+    ctx: typer.Context,
+    oficina_contable: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Código DIR3 de la Oficina Contable.",
+    ),
+    codigo: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Identificador del código de estado a asignar.",
+    ),
+    comentario: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Comentario asociado al cambio de estado.",
+    ),
+    numeros_registro: list[str] = typer.Argument(
+        ...,
+        show_default=False,
+        help="Números de registro de las facturas a cambiar estado.",
+    ),
+):
+    """Cambia el estado de las facturas.
+
+    Si se indican varias facturas, todas ellas deben pertenecer a la
+    misma Oficina Contable. El nuevo estado y comentario facilitados
+    serán asignados a todas las facturas indicadas. Obsérvese que el
+    parámetro comentario es obligatorio. Si se desea dejar en blanco se
+    de indicar explícitamente, por ejemplo, usando comillas ("").
+
+    Los estados 1300 y 3100 no pueden ser asignados mediante este
+    comando ya que estos estados son asignados de forma automática al
+    realizar las operaciones de confirmación de descarga de una factura
+    y gestión de la solicitud de anulación respectivamente. El estado
+    inicial 1200 tampoco es gestionable mediante este comando.
+    """
+
+    peticiones: list[PeticionCambiarEstadoFactura] = []
+    for numero_registro in numeros_registro:
+        peticion = PeticionCambiarEstadoFactura(
+            oficina_contable, numero_registro, codigo, comentario
+        )
+        peticiones.append(peticion)
+
+    try:
+        confirmaciones: CambiarEstadoFactura = (
+            ctx.obj.face_connection.cambiar_estado_listado_facturas(peticiones)
+        )
+    except exceptions.FACeManagementException as exc:
+        err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
+        raise typer.Exit(4)
+
+    errors = 0
+    for confirmacion in confirmaciones:
+        if isinstance(confirmacion, CambiarEstadoFactura):
+            rprint(
+                f"[field]Número de registro:[/field] [info]{confirmacion.numero_registro}[/info]"
+            )
+            rprint(f"[field]Código de estado:[/field]   {confirmacion.codigo}")
+        else:
+            rprint(f"[field]Número de registro:[/field] [info]{confirmacion.id}[/info]")
+            rprint(
+                f"  [error]Error:[/error] {confirmacion.codigo} {confirmacion.descripcion}."
+            )
+            errors += 1
+        print()
+    rprint(
+        f"[info]{len(confirmaciones)-errors}[/info] cambios correctos y [error]{errors}[/error] errores."
+    )

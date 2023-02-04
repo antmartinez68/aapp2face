@@ -1,0 +1,35 @@
+{
+    "resultado": {
+        "codigo": "0",
+        "descripcion": "Correcto",
+        "codigoSeguimiento": null
+    },
+    "facturas": {
+        "cambiarEstadoListadoFacturas": [
+            {
+                "codigo": "0",
+                "descripcion": "Correcto",
+                "factura": {
+                    "numeroRegistro": "202001020718",
+                    "codigo": "1300"
+                }
+            },
+            {
+                "codigo": "505",
+                "descripcion": "Esta transición no esta permitida a través de este web service",
+                "factura": {
+                    "numeroRegistro": "202001017112",
+                    "codigo": null
+                }
+            },
+            {
+                "codigo": "501",
+                "descripcion": "No se han encontrado facturas asociadas de la oficina contable al RCF",
+                "factura": {
+                    "numeroRegistro": "9999",
+                    "codigo": null
+                }
+            }
+        ]
+    }
+}
