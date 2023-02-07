@@ -320,3 +320,22 @@ class FACeConnection:
                     )
 
         return result
+
+    def consultar_codigo_rcf(self, numero_registro: str) -> str:
+        """Devuelve el código RCF de una factura.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe para la que quiere
+            consultarse su RCF.
+        """
+
+        response = self._client.consultar_codigo_rcf(numero_registro)
+        if response["codigoRCF"] == None:
+            result = ""
+        else:
+            result = response["codigoRCF"]
+
+        return result

@@ -307,3 +307,18 @@ class FACeSoapClient(FACeClient):
             facturas_dict_list,
             array_type="ns0:ArrayOfCambiarEstadoListadoFacturaRequest",
         )
+
+    def consultar_codigo_rcf(self, numero_registro: str):
+        """Devuelve la respuesta del método SOAP `consultarCodigoRCF`.
+
+        Este método permite consultar el código RCF de una factura.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe para la que quiere
+            consultarse su RCF.
+        """
+
+        return self._llamar_metodo_soap("consultarCodigoRCF", numero_registro)

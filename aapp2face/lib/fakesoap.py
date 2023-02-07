@@ -168,3 +168,8 @@ class FACeFakeSoapClient(FACeClient):
                 factura["factura"]["codigo"] = codigo_estado
 
         return result
+
+    def consultar_codigo_rcf(self, numero_registro: str):
+        """Simula una llamada al método `consultarCodigoRCF` en FACe."""
+
+        return self._import_response(f"consultarCodigoRCF.{numero_registro}")
