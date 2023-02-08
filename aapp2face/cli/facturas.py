@@ -350,3 +350,30 @@ def estado(
     rprint(
         f"[info]{len(confirmaciones)-errors}[/info] cambios correctos y [error]{errors}[/error] errores."
     )
+
+
+@app.command()
+def rcf(
+    ctx: typer.Context,
+    numero_registro: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Número de registro de la facturas a consultar.",
+    ),
+):
+    """Consulta el código RCF de una factura.
+
+    Consulta el código RCF asignado a una factura cuyo indentificador es
+    facilitado.
+    """
+
+    try:
+        rcf = ctx.obj.face_connection.consultar_codigo_rcf(numero_registro)
+    except exceptions.FACeManagementException as exc:
+        err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
+        raise typer.Exit(4)
+
+    if rcf == "":
+        rprint("Factura sin código RCF")
+    else:
+        rprint(f"[field]Código RCF:[/field] {rcf}")

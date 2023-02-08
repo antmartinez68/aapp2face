@@ -188,3 +188,45 @@ def test_cambiar_estado_listado_facturas():
 
     assert result.exit_code == 0
     assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_consultar_rcf():
+    numero_registro = "202001020718"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        "Código RCF: 230501/F/2014"
+    )
+
+    result = runner.invoke(
+        app, ["--fake-set", TEST_RESPONSES_PATH, "facturas", "rcf", numero_registro]
+    )
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_consultar_rcf_factura_sin_codigo():
+    numero_registro = "202001017112"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        "Factura sin código RCF"
+    )
+
+    result = runner.invoke(
+        app, ["--fake-set", TEST_RESPONSES_PATH, "facturas", "rcf", numero_registro]
+    )
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_consultar_rcf_error():
+    numero_registro = "9999"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        "Error 555: No existe archivo con respuesta para simular la petición ('consultarCodigoRCF.9999.json')."
+    )
+
+    result = runner.invoke(
+        app, ["--fake-set", TEST_RESPONSES_PATH, "facturas", "rcf", numero_registro]
+    )
+    assert result.exit_code == 4
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
