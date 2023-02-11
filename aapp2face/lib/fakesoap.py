@@ -173,3 +173,11 @@ class FACeFakeSoapClient(FACeClient):
         """Simula una llamada al método `consultarCodigoRCF` en FACe."""
 
         return self._import_response(f"consultarCodigoRCF.{numero_registro}")
+
+    def cambiar_codigo_rcf(self, numero_registro: str, codigo_rcf: str):
+        """Simula una llamada al método `cambiarCodigoRCF` en FACe."""
+
+        result = self._import_response(f"cambiarCodigoRCF.{numero_registro}")
+        result["codigoRCF"] = codigo_rcf
+
+        return result

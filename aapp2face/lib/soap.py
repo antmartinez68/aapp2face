@@ -322,3 +322,20 @@ class FACeSoapClient(FACeClient):
         """
 
         return self._llamar_metodo_soap("consultarCodigoRCF", numero_registro)
+
+    def cambiar_codigo_rcf(self, numero_registro: str, codigo_rcf: str):
+        """Devuelve la respuesta del método SOAP `cambiarCodigoRCF`.
+
+        Este método permite cambiar el código RCF de una factura.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe para la que quiere
+            consultarse su RCF.
+        codigo_rcf : str
+            Código del RCF a asignar a la factura.
+        """
+
+        return self._llamar_metodo_soap("cambiarCodigoRCF", numero_registro, codigo_rcf)

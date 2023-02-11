@@ -339,3 +339,24 @@ class FACeConnection:
             result = response["codigoRCF"]
 
         return result
+
+    def cambiar_codigo_rcf(self, numero_registro: str, codigo_rcf: str):
+        """Cambia el código RCF de una factura.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro en el REC, identificador único de la
+            factura dentro de la plataforma FACe para la que quiere
+            cambiar su RCF.
+        codigo_rcf : str
+            Código del RCF a asignar a la factura.
+        """
+
+        response = self._client.cambiar_codigo_rcf(numero_registro, codigo_rcf)
+        if response["codigoRCF"] == None:
+            result = ""
+        else:
+            result = response["codigoRCF"]
+
+        return result

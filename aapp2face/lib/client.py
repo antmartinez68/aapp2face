@@ -96,3 +96,9 @@ class FACeClient(ABC):
         """Consultar el código RCF de una factura."""
 
         pass
+
+    @abstractmethod
+    def cambiar_codigo_rcf(self, numero_registro: str, codigo_rcf: str):
+        """Cambiar el código RCF de una factura."""
+
+        pass
