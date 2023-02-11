@@ -230,3 +230,49 @@ def test_consultar_rcf_error():
     )
     assert result.exit_code == 4
     assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_cambiar_rcf():
+    numero_registro = "202001020718"
+    codigo_rcf = "1234"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        f"Código RCF: {codigo_rcf}"
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "facturas",
+            "crcf",
+            numero_registro,
+            codigo_rcf,
+        ],
+    )
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_cambiar_rcf_error():
+    numero_registro = "9999"
+    codigo_rcf = "1234"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        f"Error 555: No existe archivo con respuesta para simular la petición ('cambiarCodigoRCF.{numero_registro}.json')."
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "facturas",
+            "crcf",
+            numero_registro,
+            codigo_rcf,
+        ],
+    )
+    assert result.exit_code == 4
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")

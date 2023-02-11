@@ -377,3 +377,32 @@ def rcf(
         rprint("Factura sin código RCF")
     else:
         rprint(f"[field]Código RCF:[/field] {rcf}")
+
+
+@app.command()
+def crcf(
+    ctx: typer.Context,
+    numero_registro: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Número de registro de la factura a actualizar.",
+    ),
+    codigo_rcf: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Código RCF que se asignará a la factura.",
+    ),
+):
+    """Cambia el código RCF asginado a una factura.
+
+    Asigna el código RCF facilitado a la factura con el número de
+    registro indicado.
+    """
+
+    try:
+        rcf = ctx.obj.face_connection.cambiar_codigo_rcf(numero_registro, codigo_rcf)
+    except exceptions.FACeManagementException as exc:
+        err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
+        raise typer.Exit(4)
+
+    rprint(f"[field]Código RCF:[/field] {rcf}")
