@@ -194,3 +194,13 @@ class PeticionCambiarEstadoFactura:
     numero_registro: str
     codigo: str
     comentario: str
+
+
+@dataclass
+class NuevaAnulacion:
+    numero_registro: str
+    oficina_contable: str
+    organo_gestor: str
+    unidad_tramitadora: str
+    fecha_hora_solicitud: str
+    motivo: str

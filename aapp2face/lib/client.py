@@ -102,3 +102,9 @@ class FACeClient(ABC):
         """Cambiar el código RCF de una factura."""
 
         pass
+
+    @abstractmethod
+    def solicitar_nuevas_anulaciones(self, oficina_contable: str):
+        """Consultar la lista de facturas en estado 'solicitada anulación'."""
+
+        pass

@@ -12,6 +12,7 @@ from .objects import (
     DescargaFactura,
     Estado,
     FACeItemResult,
+    NuevaAnulacion,
     NuevaFactura,
     PeticionCambiarEstadoFactura,
     Relacion,
@@ -358,5 +359,38 @@ class FACeConnection:
             result = ""
         else:
             result = response["codigoRCF"]
+
+        return result
+
+    def solicitar_nuevas_anulaciones(
+        self, oficina_contable: str = ""
+    ) -> list[NuevaAnulacion]:
+        """Devuelve las facturas que se encuentran en estado "solicitada anulación".
+
+        El resultado está limitado a un máximo de 500 facturas. Las
+        solicitudes deben ser procesadas para que entren el resto de
+        solicitudes encoladas.
+
+        Parameters
+        ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable. Si no se pasa valor
+            retornará un listado de las facturas del RCF.
+        """
+
+        response = self._client.solicitar_nuevas_anulaciones(oficina_contable)
+        result: list[NuevaAnulacion] = []
+        if response["facturas"] is not None:
+            for factura in response["facturas"]["solicitarNuevasAnulaciones"]:
+                result.append(
+                    NuevaAnulacion(
+                        factura["numeroRegistro"],
+                        factura["oficinaContable"],
+                        factura["organoGestor"],
+                        factura["unidadTramitadora"],
+                        factura["fechaHoraSolicitudAnulacion"],
+                        factura["motivo"],
+                    )
+                )
 
         return result

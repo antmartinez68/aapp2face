@@ -339,3 +339,20 @@ class FACeSoapClient(FACeClient):
         """
 
         return self._llamar_metodo_soap("cambiarCodigoRCF", numero_registro, codigo_rcf)
+
+    def solicitar_nuevas_anulaciones(self, oficina_contable: str):
+        """Devuelve la respuesta del método SOAP `solicitarNuevasAnulaciones`.
+
+        Este método retorna la lista de facturas que se encuentran en
+        estado "solicitada anulación". El resultado está limitado a un
+        máximo de 500 facturas. Las solicitudes deben ser procesadas
+        para que entren el resto de solicitudes encoladas.
+
+        Parameters
+        ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable. Si no se pasa valor
+            retornará un listado de las facturas del RCF.
+        """
+
+        return self._llamar_metodo_soap("solicitarNuevasAnulaciones", oficina_contable)

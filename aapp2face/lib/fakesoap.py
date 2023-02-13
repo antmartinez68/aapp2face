@@ -181,3 +181,13 @@ class FACeFakeSoapClient(FACeClient):
         result["codigoRCF"] = codigo_rcf
 
         return result
+
+    def solicitar_nuevas_anulaciones(self, oficina_contable: str):
+        """Simula una llamada al método `solicitarNuevasAnulaciones` en FACe."""
+
+        if oficina_contable == "":
+            filename_prefix = "solicitarNuevasAnulaciones"
+        else:
+            filename_prefix = f"solicitarNuevasAnulaciones.{oficina_contable}"
+
+        return self._import_response(filename_prefix)
