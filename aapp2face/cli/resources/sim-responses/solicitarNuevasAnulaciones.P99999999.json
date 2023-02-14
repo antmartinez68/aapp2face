@@ -1,0 +1,10 @@
+{
+    "resultado": {
+        "codigo": "411",
+        "descripcion": "No existe o inactiva la Oficina Contable asociado al código 'P99999999'",
+        "codigoSeguimiento": null
+    },
+    "facturas": {
+        "solicitarNuevasAnulaciones": []
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "resultado": {
+        "codigo": "0",
+        "descripcion": "Correcto",
+        "codigoSeguimiento": null
+    },
+    "facturas": {
+        "solicitarNuevasAnulaciones": [
+            {
+                "numeroRegistro": "NUMERO_REGISTRO",
+                "oficinaContable": "P00000010",
+                "organoGestor": "P00000010",
+                "unidadTramitadora": "P00000010",
+                "fechaHoraSolicitudAnulacion": "2015-09-08 17:32:00",
+                "motivo": "MOTIVO"
+            },
+            {
+                "numeroRegistro": "NUMERO_REGISTRO_2",
+                "oficinaContable": "P00000010",
+                "organoGestor": "P00000010",
+                "unidadTramitadora": "P00000010",
+                "fechaHoraSolicitudAnulacion": "2015-09-08 17:10:31",
+                "motivo": "MOTIVO"
+            }
+        ]
+    }
+}
