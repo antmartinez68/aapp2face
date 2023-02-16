@@ -356,3 +356,33 @@ class FACeSoapClient(FACeClient):
         """
 
         return self._llamar_metodo_soap("solicitarNuevasAnulaciones", oficina_contable)
+
+    def gestionar_solicitud_anulacion_factura(
+        self, oficina_contable: str, numero_registro: str, codigo: str, comentario: str
+    ):
+        """Devuelve la respuesta del método SOAP `gestionarSolicitudAnulacionFactura`.
+
+        Este método permite gestionar una solicitud de anulación,
+        aceptándo o rechazando dicha solicitud.
+
+        Parameters
+        ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable.
+        numero_registro : str
+            Número de registro, en el REC, de la factura para la que
+            quiere gestionarse su solicitud de anulación.
+        codigo : str
+            Identificador del código de estado a asignar.
+        comentario : str
+            Comentario asociado a la gestión de la solicitud de
+            anulación.
+        """
+
+        return self._llamar_metodo_soap(
+            "gestionarSolicitudAnulacionFactura",
+            oficina_contable,
+            numero_registro,
+            codigo,
+            comentario,
+        )

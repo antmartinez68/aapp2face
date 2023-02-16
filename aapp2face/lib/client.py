@@ -108,3 +108,11 @@ class FACeClient(ABC):
         """Consultar la lista de facturas en estado 'solicitada anulación'."""
 
         pass
+
+    @abstractmethod
+    def gestionar_solicitud_anulacion_factura(
+        self, oficina_contable: str, numero_registro: str, codigo: str, comentario: str
+    ):
+        """Gestionar la solicitud de anulación de una factura."""
+
+        pass

@@ -1,0 +1,11 @@
+{
+    "resultado": {
+        "codigo": "0",
+        "descripcion": "Correcto",
+        "codigoSeguimiento": null
+    },
+    "factura": {
+        "numeroRegistro": "202001020718",
+        "codigo": "Este código será alterado por la simulación o test"
+    }
+}

@@ -204,3 +204,19 @@ class NuevaAnulacion:
     unidad_tramitadora: str
     fecha_hora_solicitud: str
     motivo: str
+
+
+@dataclass
+class GestionarSolicitudAnulacionFactura:
+    """Clase para respuesta FACe al gestionar solicitud anulación de una factura.
+
+    Attributes
+    ----------
+        numero_registro : str
+            Número de registro de la factura dentro de FACe.
+        codigo : str
+            Identificador del código de estado asignado.
+    """
+
+    numero_registro: str
+    codigo: str
