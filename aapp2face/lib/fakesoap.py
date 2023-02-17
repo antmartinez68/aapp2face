@@ -7,7 +7,11 @@ from pathlib import Path
 
 from . import exceptions
 from .client import FACeClient
-from .objects import FACeResult, PeticionCambiarEstadoFactura
+from .objects import (
+    FACeResult,
+    PeticionCambiarEstadoFactura,
+    PeticionSolicitudAnulacionListadoFactura,
+)
 
 FILE_RESPONSE_EXTENSION = "json"
 
@@ -231,5 +235,27 @@ class FACeFakeSoapClient(FACeClient):
             )
 
         result["factura"]["codigo"] = codigo
+
+        return result
+
+    def gestionar_solicitud_anulacion_listado_facturas(
+        self, facturas: list[PeticionSolicitudAnulacionListadoFactura]
+    ):
+        """Simula una llamada al método `gestionarSolicitudAnulacionFacturas` en FACe."""
+
+        # Este método falsea el que debería ser su comportamiento para
+        # permitir probar de forma rápida el cambio de estado desde CLI.
+        oficina_contable = facturas[0].oficina_contable
+        codigo_estado = facturas[0].codigo
+        numeros_registro = [peticion.numero_registro for peticion in facturas]
+        str_numeros_registro = ".".join(numeros_registro)
+
+        result = self._import_response(
+            f"gestionarSolicitudAnulacionListadoFacturas.{oficina_contable}.{str_numeros_registro}"
+        )
+
+        for factura in result["facturas"]["gestionarSolicitudAnulacionListadoFacturas"]:
+            if factura["codigo"] == "0":
+                factura["factura"]["codigo"] = codigo_estado
 
         return result

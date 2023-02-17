@@ -220,3 +220,26 @@ class GestionarSolicitudAnulacionFactura:
 
     numero_registro: str
     codigo: str
+
+
+@dataclass
+class PeticionSolicitudAnulacionListadoFactura:
+    """Clase para peticiones FACe al gestionar la solicitud de anulación de un listado de facturas.
+
+    Attributes
+    ----------
+        oficina_contable : str
+            Código DIR3 de la Oficina Contable.
+        numero_registro : str
+            Número de registro de la factura dentro de FACe.
+        codigo : str
+            Identificador del código de estado a asignar.
+        comentario : str
+            Comentario asociado a la gestión de la solicitud de
+            anulación.
+    """
+
+    oficina_contable: str
+    numero_registro: str
+    codigo: str
+    comentario: str

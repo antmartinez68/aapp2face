@@ -16,6 +16,7 @@ from .objects import (
     NuevaAnulacion,
     NuevaFactura,
     PeticionCambiarEstadoFactura,
+    PeticionSolicitudAnulacionListadoFactura,
     Relacion,
     UnidadDir3,
 )
@@ -423,3 +424,45 @@ class FACeConnection:
             response["factura"]["numeroRegistro"],
             response["factura"]["codigo"],
         )
+
+    def gestionar_solicitud_anulacion_listado_facturas(
+        self, facturas: list[PeticionSolicitudAnulacionListadoFactura]
+    ):
+        """Gestiona la solicitud de anulación de varias facturas.
+
+        El servicio web limita a un máximo de 100 facturas la petición.
+
+        Parameters
+        ----------
+        facturas : list[PeticionSolicitudAnulacionListadoFactura]
+            Lista de peticiones con los datos de las solicitudes de
+            anulación a gestionar.
+        """
+
+        response = self._client.gestionar_solicitud_anulacion_listado_facturas(facturas)
+
+        result: list[GestionarSolicitudAnulacionFactura | FACeItemResult] = []
+        if (
+            response["facturas"]["gestionarSolicitudAnulacionListadoFacturas"]
+            is not None
+        ):
+            for factura in response["facturas"][
+                "gestionarSolicitudAnulacionListadoFacturas"
+            ]:
+                if factura["codigo"] == "0":
+                    result.append(
+                        GestionarSolicitudAnulacionFactura(
+                            factura["factura"]["numeroRegistro"],
+                            factura["factura"]["codigo"],
+                        )
+                    )
+                else:
+                    result.append(
+                        FACeItemResult(
+                            factura["codigo"],
+                            factura["descripcion"],
+                            factura["factura"]["numeroRegistro"],
+                        )
+                    )
+
+        return result

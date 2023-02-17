@@ -10,7 +10,11 @@ from lxml import etree
 from zeep.plugins import HistoryPlugin
 
 from .client import FACeClient
-from .objects import FACeResult, PeticionCambiarEstadoFactura
+from .objects import (
+    FACeResult,
+    PeticionCambiarEstadoFactura,
+    PeticionSolicitudAnulacionListadoFactura,
+)
 from .patch import BinarySignatureTimestamp
 
 
@@ -385,4 +389,38 @@ class FACeSoapClient(FACeClient):
             numero_registro,
             codigo,
             comentario,
+        )
+
+    def gestionar_solicitud_anulacion_listado_facturas(
+        self, facturas: list[PeticionSolicitudAnulacionListadoFactura]
+    ):
+        """Devuelve la respuesta del método SOAP `gestionarSolicitudAnulacionListadoFacturas`.
+
+        Este método permite gestionar la solicitud de anulación de
+        varias facturas.
+
+        Se permite hasta un máximo de 100 facturas en una misma llamada.
+
+        Parameters
+        ----------
+        facturas : list[PeticionSolicitudAnulacionListadoFactura]
+            Lista de peticiones con los datos de las solicitudes de
+            anulación a gestionar.
+        """
+
+        facturas_dict_list = []
+        for factura in facturas:
+            facturas_dict_list.append(
+                {
+                    "oficinaContable": factura.oficina_contable,
+                    "numeroRegistro": factura.numero_registro,
+                    "codigo": factura.codigo,
+                    "comentarios": factura.comentario,
+                }
+            )
+
+        return self._llamar_metodo_soap(
+            "cambiarEstadoListadoFacturas",
+            facturas_dict_list,
+            array_type="ns0:ArrayOfGestionarSolicitudAnulacionListadoFacturasRequest",
         )

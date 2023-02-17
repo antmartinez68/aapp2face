@@ -116,3 +116,11 @@ class FACeClient(ABC):
         """Gestionar la solicitud de anulación de una factura."""
 
         pass
+
+    @abstractmethod
+    def gestionar_solicitud_anulacion_listado_facturas(
+        self, facturas: list[PeticionCambiarEstadoFactura]
+    ):
+        """Gestionar la solicitud de anulación de varias facturas."""
+
+        pass
