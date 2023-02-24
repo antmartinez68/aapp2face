@@ -424,3 +424,17 @@ class FACeSoapClient(FACeClient):
             facturas_dict_list,
             array_type="ns0:ArrayOfGestionarSolicitudAnulacionListadoFacturasRequest",
         )
+
+    def consultar_estado_cesion(self, numero_registro: str):
+        """Devuelve la respuesta del método SOAP `consultarEstadoCesion`.
+
+        Este método permite consultar el estado de la cesión de una factura.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro, en el REC, de la factura para la que
+            quiere consultarse el estado de la cesión.
+        """
+
+        return self._llamar_metodo_soap("consultarEstadoCesion", numero_registro)

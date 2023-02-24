@@ -11,6 +11,7 @@ from .objects import (
     ConsultarFactura,
     DescargaFactura,
     Estado,
+    EstadoCesion,
     FACeItemResult,
     GestionarSolicitudAnulacionFactura,
     NuevaAnulacion,
@@ -464,5 +465,30 @@ class FACeConnection:
                             factura["factura"]["numeroRegistro"],
                         )
                     )
+
+        return result
+
+    def consultar_estado_cesion(self, numero_registro: str) -> EstadoCesion:
+        """Devuelve el estado de la cesión de una factura.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro, en el REC, de la factura para la que
+            quiere consultarse el estado de la cesión.
+
+        Returns
+        -------
+        EstadoCesion
+            estructura que contiene el estado de la cesión
+        """
+
+        response = self._client.consultar_estado_cesion(numero_registro)
+
+        result = EstadoCesion(
+            response["cesion"]["numeroRegistro"],
+            response["cesion"]["estado"],
+            response["cesion"]["comentario"],
+        )
 
         return result

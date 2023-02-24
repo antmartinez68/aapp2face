@@ -259,3 +259,8 @@ class FACeFakeSoapClient(FACeClient):
                 factura["factura"]["codigo"] = codigo_estado
 
         return result
+
+    def consultar_estado_cesion(self, numero_registro: str):
+        """Simula una llamada al método `consultarEstadoCesion` en FACe."""
+
+        return self._import_response(f"consultarEstadoCesion.{numero_registro}")

@@ -124,3 +124,9 @@ class FACeClient(ABC):
         """Gestionar la solicitud de anulación de varias facturas."""
 
         pass
+
+    @abstractmethod
+    def consultar_estado_cesion(self, numero_registro: str):
+        """Consultar el estado de una cesión"""
+
+        pass

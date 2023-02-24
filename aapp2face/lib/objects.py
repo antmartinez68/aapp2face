@@ -243,3 +243,22 @@ class PeticionSolicitudAnulacionListadoFactura:
     numero_registro: str
     codigo: str
     comentario: str
+
+
+@dataclass
+class EstadoCesion:
+    """Clase para peticiones FACe al cambiar estado de un listado de facturas.
+
+    Attributes
+    ----------
+        numero_registro : str
+            Número de registro de la factura dentro de FACe.
+        codigo : str
+            Identificador del código de estado de la cesión.
+        comentario : str
+            Comentario asociado al estado de cesión de la factura.
+    """
+
+    numero_registro: str
+    codigo: str
+    comentario: str
