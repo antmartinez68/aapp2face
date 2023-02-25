@@ -17,7 +17,7 @@ from aapp2face import (
     exceptions,
 )
 
-from . import anulaciones, facturas
+from . import anulaciones, cesiones, facturas
 from .helpers import err_rprint, export_data, get_config_path, rprint, verify_export
 
 # Config constants
@@ -35,6 +35,7 @@ FAKE_RESPONSES_DIR = "."
 app = typer.Typer(no_args_is_help=True)
 app.add_typer(facturas.app, name="facturas")
 app.add_typer(anulaciones.app, name="anulaciones")
+app.add_typer(cesiones.app, name="cesiones")
 
 
 class AppData:
