@@ -1,0 +1,67 @@
+site_name: AAPP2FACe
+site_url: https://github.com/antmartinez68/aapp2face
+site_author: Antonio Martínez
+
+copyright: Copyright &copy; 2023 Antonio Martínez
+
+repo_url: https://github.com/antmartinez68/aapp2face
+
+nav:
+  - Inicio: 'README.md'
+  - Librería:
+    - Introducción: 'lib.md'
+    - Referencia API:
+      - FACeConnetion: 'api/FACeConnection.md'
+      - FACeClient: 'api/FACeClient.md'
+      - FACeSoapClient: 'api/FACeSoapClient.md'
+      - FACeFakeSoapClient: 'api/FACeFakeSoapClient.md'
+      - objects: 'api/objects.md'
+      - exceptions: 'api/exceptions.md'
+  - CLI:
+    - Introducción: 'cli.md'
+    - Manual de comandos: 'commands.md'
+  - Glosario: 'glossary.md'
+  - Changelog: 'changelog.md'
+
+theme:
+  name: "material"
+  language: es
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  icon:
+    logo: fontawesome/solid/building-columns
+    repo: fontawesome/brands/github-alt
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            show_source: false
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_css:
+  - css/termynal.css
+  - css/custom.css
+
+extra_javascript:
+  - https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js
+  - js/termynal.js
+  - js/custom.js
