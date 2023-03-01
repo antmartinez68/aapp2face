@@ -130,3 +130,9 @@ class FACeClient(ABC):
         """Consultar el estado de una cesión"""
 
         pass
+
+    @abstractmethod
+    def obtener_documento_cesion(self, csv: str, repositorio: str, solicitante: dict):
+        """Obtener el documento de la cesión de una factura"""
+
+        pass

@@ -264,3 +264,11 @@ class FACeFakeSoapClient(FACeClient):
         """Simula una llamada al método `consultarEstadoCesion` en FACe."""
 
         return self._import_response(f"consultarEstadoCesion.{numero_registro}")
+
+    def obtener_documento_cesion(self, csv: str, repositorio: str, solicitante: dict):
+        """Simula una llamada al método `obtenerDocumentoCesion`en FACe."""
+
+        return self._import_response(
+            f"obtenerDocumentoCesion.{csv}.{repositorio}."
+            f"{solicitante['nif']}.{solicitante['nombre']}.{solicitante['apellidos']}"
+        )

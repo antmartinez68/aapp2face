@@ -438,3 +438,22 @@ class FACeSoapClient(FACeClient):
         """
 
         return self._llamar_metodo_soap("consultarEstadoCesion", numero_registro)
+
+    def obtener_documento_cesion(self, csv: str, repositorio: str, solicitante: dict):
+        """Devuelve la respuesta del método SOAP `obtenerDocumentoCesion`.
+
+        Este método permite obtener el documento de la cesión conectando al servicio de notarios.
+
+        Parameters
+        ----------
+        csv : str
+            Identificador del documento.
+        repositorio : str
+            Repositorio desde el que se obtiene el documento.
+        solicitante : dict
+            Datos del solicitante (nif, nombre, apellidos).
+        """
+
+        return self._llamar_metodo_soap(
+            "obtenerDocumentoCesion", csv, repositorio, solicitante
+        )

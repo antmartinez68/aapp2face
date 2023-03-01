@@ -9,7 +9,9 @@ from .objects import (
     ConfirmaDescargaFactura,
     ConsultarEstadoFactura,
     ConsultarFactura,
+    DatosSolicitante,
     DescargaFactura,
+    DocumentoCesion,
     Estado,
     EstadoCesion,
     FACeItemResult,
@@ -489,6 +491,45 @@ class FACeConnection:
             response["cesion"]["numeroRegistro"],
             response["cesion"]["estado"],
             response["cesion"]["comentario"],
+        )
+
+        return result
+
+    def obtener_documento_cesion(
+        self, csv: str, repositorio: str, solicitante: DatosSolicitante
+    ):
+        """Obtiene el documento de la cesión de una factura.
+
+        Parameters
+        ----------
+        csv : str
+            Identificador del documento.
+        repositorio : str
+            Repositorio desde el que se obtiene el documento.
+        solicitante : DatosSolicitante
+            Datos del solicitante (nif, nombre, apellidos).
+
+        Returns
+        -------
+        DocumentoCesion
+            estructura de datos que contiene el documento de la cesión
+        """
+
+        dict_solicitante = {
+            "nif": solicitante.nif,
+            "nombre": solicitante.nombre,
+            "apellidos": solicitante.apellidos,
+        }
+
+        response = self._client.obtener_documento_cesion(
+            csv, repositorio, dict_solicitante
+        )
+
+        result = DocumentoCesion(
+            response["documento"]["numeroRegistro"],
+            response["documento"]["documento"],
+            response["documento"]["nombre"],
+            response["documento"]["mime"],
         )
 
         return result

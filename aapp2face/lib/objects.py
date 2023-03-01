@@ -262,3 +262,51 @@ class EstadoCesion:
     numero_registro: str
     codigo: str
     comentario: str
+
+
+@dataclass
+class DatosSolicitante:
+    """Clase para datos solicitante en peticiones FACe para obtener documento de cesión.
+
+    Attributes
+    ----------
+        nif : str
+            NIF del solicitante para obtener documento de cesión.
+        nombre : str
+            Nombre del solicitante para obtener documento de cesión.
+        apellidos : str
+            Apellidos del solicitante para obtener documento de cesión.
+    """
+
+    nif: str
+    nombre: str
+    apellidos: str
+
+
+@dataclass
+class DocumentoCesion:
+    """Clase equivalente al parámetro DocumentoCesion en respuestas FACe"""
+
+    numero_registro: str
+    documento: str
+    nombre: str
+    mime: str
+
+    def guardar(self, path: Path = None, force: bool = False) -> None:
+        """Crea un archivo con el documento de la cesión.
+
+        Parameters
+        ----------
+        path : str, optional
+            Ruta donde se guardará el documento decodificada.
+        force : bool, optional
+            Sobrescribe el archivo si existe. En caso contrario lanza
+            una excepción. Por defecto False.
+        """
+        decoded_data = base64.b64decode(self.documento)
+        if force:
+            mode = "wb"
+        else:
+            mode = "xb"
+        with open(Path(path, self.nombre), mode) as file:
+            file.write(decoded_data)
