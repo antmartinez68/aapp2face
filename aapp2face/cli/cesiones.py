@@ -2,10 +2,13 @@
 Módulo para el comando `cesiones`
 """
 
+from pathlib import Path
+from typing import Optional
+
 import typer
 
 from aapp2face import exceptions
-from aapp2face.lib.objects import EstadoCesion
+from aapp2face.lib.objects import DatosSolicitante, EstadoCesion
 
 from .helpers import err_rprint, rprint
 
@@ -33,10 +36,69 @@ def consultar(
         err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
         raise typer.Exit(4)
 
-    if isinstance(cesion, EstadoCesion):
-        rprint(f"[field]Número registro:[/field] [info]{cesion.numero_registro}[/info]")
-        rprint(f"[field]Estado:[/field]          {cesion.codigo}")
-        rprint(f"[field]Comentario:[/field]      {cesion.comentario}")
-    else:
-        rprint(f"[field]Número registro:[/field] [info]{cesion.id}[/info]")
-        rprint(f"  [error]Error:[/error] {cesion.codigo} {cesion.descripcion}.")
+    rprint(f"[field]Número registro:[/field] [info]{cesion.numero_registro}[/info]")
+    rprint(f"[field]Estado:[/field]          {cesion.codigo}")
+    rprint(f"[field]Comentario:[/field]      {cesion.comentario}")
+
+
+@app.command()
+def documento(
+    ctx: typer.Context,
+    force: Optional[bool] = typer.Option(
+        False,
+        "--force",
+        "-f",
+        help="Sobrescribe los archivos de factura o anexos si existen.",
+    ),
+    csv: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="CSV del documento a obtener.",
+    ),
+    repositorio: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Repositorio desde el que se obtiene el documento.",
+    ),
+    nif: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="NIF del solicitante.",
+    ),
+    nombre: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Nombre del solicitante.",
+    ),
+    apellidos: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Apellidos del solicitante.",
+    ),
+):
+    """Obtiene el documento de la cesión.
+
+    Obtiene el documento de la cesión conectando al servicio de notarios.
+    """
+
+    try:
+        documento = ctx.obj.face_connection.obtener_documento_cesion(
+            csv, repositorio, DatosSolicitante(nif, nombre, apellidos)
+        )
+    except exceptions.FACeManagementException as exc:
+        err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
+        raise typer.Exit(4)
+
+    # Guardar documento
+    path = Path(ctx.obj.config["App"]["download_dir"])
+    path.mkdir(parents=True, exist_ok=True)
+    try:
+        documento.guardar(path, force)
+    except FileExistsError:
+        err_rprint(
+            f"[warning]Aviso:[/warning] El archivo [data]{documento.nombre}[/data] ya existe, no será sobrescrito."
+        )
+
+    rprint(f"[field]Núm. Registro:[/field] [info]{documento.numero_registro}[/info]")
+    rprint(f"[field]Archivo:[/field]       {documento.nombre}")
+    rprint(f"[field]Mime:[/field]          {documento.mime}")

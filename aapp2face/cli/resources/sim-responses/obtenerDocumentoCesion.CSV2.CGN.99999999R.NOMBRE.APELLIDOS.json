@@ -1,0 +1,13 @@
+{
+    "resultado": {
+        "codigo": "534",
+        "descripcion": "Ocurrió un error al obtener el documento de Notarios",
+        "codigoSeguimiento": null
+    },
+    "documento": {
+        "numeroRegistro": null,
+        "documento": null,
+        "nombre": null,
+        "mime": null
+    }
+}
