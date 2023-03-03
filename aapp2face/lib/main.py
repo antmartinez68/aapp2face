@@ -15,6 +15,7 @@ from .objects import (
     Estado,
     EstadoCesion,
     FACeItemResult,
+    GestionarCesion,
     GestionarSolicitudAnulacionFactura,
     NuevaAnulacion,
     NuevaFactura,
@@ -533,3 +534,25 @@ class FACeConnection:
         )
 
         return result
+
+    def gestionar_cesion(self, numero_registro: str, codigo: str, comentario: str):
+        """Gestiona una cesión de crédito, aceptándo o rechazando dicha cesión.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro, en el REC, de la factura para la que
+            quiere gestionarse la cesión de crédito.
+        codigo : str
+            Identificador del código de estado a asignar.
+        comentario : str
+            Comentario asociado a la gestión de la cesión de crédito.
+        """
+
+        response = self._client.gestionar_cesion(numero_registro, codigo, comentario)
+
+        return GestionarCesion(
+            response["cesion"]["numeroRegistro"],
+            response["cesion"]["codigo"],
+            response["cesion"]["comentario"],
+        )

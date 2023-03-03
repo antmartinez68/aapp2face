@@ -272,3 +272,44 @@ class FACeFakeSoapClient(FACeClient):
             f"obtenerDocumentoCesion.{csv}.{repositorio}."
             f"{solicitante['nif']}.{solicitante['nombre']}.{solicitante['apellidos']}"
         )
+
+    def gestionar_cesion(self, numero_registro: str, codigo: str, comentario: str):
+        """Simula una llamada al método `gestionarCesion` en FACe."""
+
+        result = self._import_response(f"gestionarCesion.{numero_registro}")
+
+        # Simulación de algunos de los códigos de estado que provocan error
+        estados_permitidos = (
+            "1200",
+            "1300",
+            "1400",
+            "2100",
+            "2300",
+            "2400",
+            "2500",
+            "2600",
+            "3100",
+            "4100",
+            "4200",
+            "4300",
+            "6100",
+            "6200",
+            "6300",
+        )
+
+        if codigo not in estados_permitidos:
+            raise exceptions.FACeManagementException(
+                "405",
+                f"No existe el código de estado {codigo}",
+            )
+
+        if codigo != "6200" and codigo != "6300":
+            raise exceptions.FACeManagementException(
+                "505",
+                "Esta transición no esta permitida a través de este web service",
+            )
+
+        result["cesion"]["codigo"] = codigo
+        result["cesion"]["comentario"] = comentario
+
+        return result

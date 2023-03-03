@@ -310,3 +310,22 @@ class DocumentoCesion:
             mode = "xb"
         with open(Path(path, self.nombre), mode) as file:
             file.write(decoded_data)
+
+
+@dataclass
+class GestionarCesion:
+    """Clase para respuesta FACe al gestionar una cesión de crédito.
+
+    Attributes
+    ----------
+        numero_registro : str
+            Número de registro de la factura dentro de FACe.
+        codigo : str
+            Identificador del código de estado de la cesión.
+        comentario : str
+            Comentario asociado al estado de la cesión de crédito.
+    """
+
+    numero_registro: str
+    codigo: str
+    comentario: str

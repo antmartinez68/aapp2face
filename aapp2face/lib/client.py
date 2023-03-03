@@ -136,3 +136,9 @@ class FACeClient(ABC):
         """Obtener el documento de la cesión de una factura"""
 
         pass
+
+    @abstractmethod
+    def gestionar_cesion(self, numero_registro: str, codigo: str, comentario: str):
+        """Gestionar la cesión de crédito de una factura."""
+
+        pass

@@ -457,3 +457,27 @@ class FACeSoapClient(FACeClient):
         return self._llamar_metodo_soap(
             "obtenerDocumentoCesion", csv, repositorio, solicitante
         )
+
+    def gestionar_cesion(self, numero_registro: str, codigo: str, comentario: str):
+        """Devuelve la respuesta del método SOAP `gestionarCesion`.
+
+        Este método permite gestionar una crédito, aceptándo o
+        rechazando dicha cesión.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro, en el REC, de la factura para la que
+            quiere gestionarse la cesión de crédito.
+        codigo : str
+            Identificador del código de estado a asignar.
+        comentario : str
+            Comentario asociado a la gestión de la cesión de crédito.
+        """
+
+        return self._llamar_metodo_soap(
+            "gestionarCesion",
+            numero_registro,
+            codigo,
+            comentario,
+        )
