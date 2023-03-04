@@ -1,0 +1,12 @@
+{
+    "resultado": {
+        "codigo": "501",
+        "descripcion": "No se han encontrado facturas asociadas de la oficina contable al RCF",
+        "codigoSeguimiento": null
+    },
+    "cesion": {
+        "numeroRegistro": null,
+        "codigo": null,
+        "comentario": null
+    }
+}

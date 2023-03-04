@@ -8,7 +8,7 @@ from typing import Optional
 import typer
 
 from aapp2face import exceptions
-from aapp2face.lib.objects import DatosSolicitante, EstadoCesion
+from aapp2face.lib.objects import DatosSolicitante, EstadoCesion, GestionarCesion
 
 from .helpers import err_rprint, rprint
 
@@ -102,3 +102,42 @@ def documento(
     rprint(f"[field]Núm. Registro:[/field] [info]{documento.numero_registro}[/info]")
     rprint(f"[field]Archivo:[/field]       {documento.nombre}")
     rprint(f"[field]Mime:[/field]          {documento.mime}")
+
+
+@app.command()
+def gestionar(
+    ctx: typer.Context,
+    codigo: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Identificador del código de estado a asignar.",
+    ),
+    comentario: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Comentario asociado al cambio de estado.",
+    ),
+    numero_registro: str = typer.Argument(
+        ...,
+        show_default=False,
+        help="Números de registro de la factura de la cesión.",
+    ),
+):
+    """Gestiona la cesión de crédito de una factura.
+
+    Obsérvese que el parámetro comentario es obligatorio. Si se desea
+    dejar en blanco se de indicar explícitamente, por ejemplo, usando
+    comillas ("").
+    """
+
+    try:
+        cesion: GestionarCesion = ctx.obj.face_connection.gestionar_cesion(
+            numero_registro, codigo, comentario
+        )
+    except exceptions.FACeManagementException as exc:
+        err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
+        raise typer.Exit(4)
+
+    rprint(f"[field]Número de registro:[/field] [info]{cesion.numero_registro}[/info]")
+    rprint(f"[field]Código de estado:[/field]   {cesion.codigo}")
+    rprint(f"[field]Comentario:[/field]         {cesion.comentario}")

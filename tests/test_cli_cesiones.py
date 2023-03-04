@@ -153,3 +153,55 @@ def test_documento_aviso_documento_no_sobrescrito(temporary_dir):
 
     assert result.exit_code == 0
     assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_gestionar():
+    estado = "6200"
+    comentario = ""
+    numero_registro = "202001020718"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        f"Número de registro: {numero_registro}"
+        f"Código de estado:   {estado}"
+        f"Comentario:         {comentario}"
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "cesiones",
+            "gestionar",
+            estado,
+            comentario,
+            numero_registro,
+        ],
+    )
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_gestionar_error_factura_no_existente():
+    estado = "6200"
+    comentario = ""
+    numero_registro = "202001020719"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        "Error 501: No se han encontrado facturas asociadas de la oficina contable al RCF."
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "cesiones",
+            "gestionar",
+            estado,
+            comentario,
+            numero_registro,
+        ],
+    )
+    assert result.exit_code == 4
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
