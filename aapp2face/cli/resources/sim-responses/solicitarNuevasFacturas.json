@@ -7,14 +7,14 @@
     "facturas": {
         "solicitarNuevasFacturas": [
             {
-                "numeroRegistro": "NUMERO_REGISTRO",
+                "numeroRegistro": "202001020718",
                 "oficinaContable": "P00000010",
                 "organoGestor": "P00000010",
                 "unidadTramitadora": "P00000010",
                 "fechaHoraRegistro": "2014-03-19 10:57:38"
             },
             {
-                "numeroRegistro": "NUMERO_REGISTRO_2",
+                "numeroRegistro": "202001020719",
                 "oficinaContable": "P00000010",
                 "organoGestor": "P00000010",
                 "unidadTramitadora": "P00000010",

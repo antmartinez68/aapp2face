@@ -40,7 +40,7 @@ def obtener_facturas_nuevas(
         facturas = ctx.obj.face_connection.solicitar_nuevas_facturas(oficina_contable)
     except exceptions.FACeManagementException as exc:
         err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
-        raise typer.Exit(1)
+        raise typer.Exit(4)
 
     return facturas
 
@@ -325,13 +325,9 @@ def estado(
         )
         peticiones.append(peticion)
 
-    try:
-        confirmaciones: CambiarEstadoFactura = (
-            ctx.obj.face_connection.cambiar_estado_listado_facturas(peticiones)
-        )
-    except exceptions.FACeManagementException as exc:
-        err_rprint(f"[error]Error {exc.code}:[/error] {exc.msg}.")
-        raise typer.Exit(4)
+    confirmaciones: CambiarEstadoFactura = (
+        ctx.obj.face_connection.cambiar_estado_listado_facturas(peticiones)
+    )
 
     errors = 0
     for confirmacion in confirmaciones:

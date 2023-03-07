@@ -1,21 +1,37 @@
+import tempfile
+from pathlib import Path
+
+import pytest
 from typer.testing import CliRunner
 
 from aapp2face.cli.main import app
 
 from .constants import TEST_RESPONSES_PATH
+from .helpers import md5sum
 
 runner = CliRunner()
 
 
+@pytest.fixture
+def temporary_dir():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        yield tmpdir
+
+
+@pytest.fixture
+def temporary_file():
+    yield tempfile.NamedTemporaryFile().name
+
+
 def test_nuevas():
     expected_output = (
-        "Número registro:    NUMERO_REGISTRO"
+        "Número registro:    202001020718"
         "Fecha registro:     2014-03-19 10:57:38"
         "Oficina contable:   P00000010"
         "Órgano gestor:      P00000010"
         "Unidad tramitadora: P00000010"
         ""
-        "Número registro:    NUMERO_REGISTRO_2"
+        "Número registro:    202001020719"
         "Fecha registro:     2014-03-19 11:05:51"
         "Oficina contable:   P00000010"
         "Órgano gestor:      P00000010"
@@ -27,6 +43,193 @@ def test_nuevas():
     result = runner.invoke(
         app, ["--fake-set", TEST_RESPONSES_PATH, "facturas", "nuevas"]
     )
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_nuevas_error_oficina_no_existente():
+    oficina_contable = "P99999999"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        f"Error 411: No existe o inactiva la Oficina Contable asociado al código '{oficina_contable}'."
+    )
+
+    result = runner.invoke(
+        app,
+        ["--fake-set", TEST_RESPONSES_PATH, "facturas", "nuevas", oficina_contable],
+    )
+    assert result.exit_code == 4
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_nuevas_export(temporary_file):
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        "2 nuevas facturas disponibles"
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "facturas",
+            "nuevas",
+            "--export",
+            temporary_file,
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_descargar_factura(temporary_dir):
+    numero_registro = "202001020718"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        "Núm. Registro: 202001020718"
+        "Núm. Factura:  000000B18"
+        "Serie:         None"
+        "Importe:       63.13"
+        "Proveedor:     A82735122"
+        "Archivo:       sample-factura-firmada-32v1.xsig"
+        "Anexos:        anexo_1.pdf"
+        ""
+        "1 facturas descargadas"
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "--download-dir",
+            temporary_dir,
+            "facturas",
+            "descargar",
+            numero_registro,
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+    assert (
+        md5sum(
+            Path(temporary_dir)
+            .joinpath(numero_registro)
+            .joinpath("sample-factura-firmada-32v1.xsig")
+        )
+        == "2f1d9e07888f0e97f48f35f32e998d3b"
+    )
+    assert (
+        md5sum(Path(temporary_dir).joinpath(numero_registro).joinpath("anexo_1.pdf"))
+        == "36e15cfd5f79bfad2fb03436aa503a82"
+    )
+
+
+def test_descargar_factura_export(temporary_dir, temporary_file):
+    numero_registro = "202001020718"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        "1 facturas descargadas"
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "--download-dir",
+            temporary_dir,
+            "facturas",
+            "descargar",
+            "--export",
+            temporary_file,
+            numero_registro,
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_descargar_factura_aviso_documento_no_sobrescrito(temporary_dir):
+    numero_registro = "202001020718"
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        "Aviso: El archivo sample-factura-firmada-32v1.xsig ya existe, no será sobrescrito."
+        ""
+        "Aviso: El archivo anexo_1.pdf ya existe, no será sobrescrito."
+        ""
+        f"Núm. Registro: {numero_registro}"
+        "Núm. Factura:  000000B18"
+        "Serie:         None"
+        "Importe:       63.13"
+        "Proveedor:     A82735122"
+        "Archivo:       sample-factura-firmada-32v1.xsig"
+        "Anexos:        anexo_1.pdf"
+        ""
+        "1 facturas descargadas"
+    )
+
+    Path(temporary_dir).joinpath(numero_registro).mkdir()
+    Path(temporary_dir).joinpath(numero_registro).joinpath(
+        "sample-factura-firmada-32v1.xsig"
+    ).touch()
+    Path(temporary_dir).joinpath(numero_registro).joinpath("anexo_1.pdf").touch()
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "--download-dir",
+            temporary_dir,
+            "facturas",
+            "descargar",
+            numero_registro,
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
+
+
+def test_descargar_todas_las_facturas_nuevas(temporary_dir):
+    expected_output = (
+        "Aviso: Usando entorno de simulación. Algunos parámetros de configuración serán ignorados."
+        "Núm. Registro: 202001020718"
+        "Núm. Factura:  000000B18"
+        "Serie:         None"
+        "Importe:       63.13"
+        "Proveedor:     A82735122"
+        "Archivo:       sample-factura-firmada-32v1.xsig"
+        "Anexos:        anexo_1.pdf"
+        ""
+        "Núm. Registro: 202001020719"
+        "Núm. Factura:  000000B19"
+        "Serie:         None"
+        "Importe:       1815.65"
+        "Proveedor:     A82735122"
+        "Archivo:       another-sample-factura-firmada-32v1.xsig"
+        "Anexos:        another_anexo_1.pdf"
+        ""
+        "2 facturas descargadas"
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "--fake-set",
+            TEST_RESPONSES_PATH,
+            "--download-dir",
+            temporary_dir,
+            "facturas",
+            "descargar",
+        ],
+    )
+
     assert result.exit_code == 0
     assert expected_output.replace("\n", "") in result.stdout.replace("\n", "")
 

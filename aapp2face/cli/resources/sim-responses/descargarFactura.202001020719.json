@@ -1,0 +1,25 @@
+{
+    "resultado": {
+        "codigo": "0",
+        "descripcion": "Correcto",
+        "codigoSeguimiento": null
+    },
+    "factura": {
+        "numero": "000000B19",
+        "serie": null,
+        "importe": "1815.65",
+        "proveedor": "A82735122",
+        "nombre": "another-sample-factura-firmada-32v1.xsig",
+        "factura": "",
+        "mime": "application/xml",
+        "anexos": {
+            "AnexoFile": [
+                {
+                    "anexo": "",
+                    "nombre": "another_anexo_1.pdf",
+                    "mime": "application/pdf"
+                }
+            ]
+        }
+    }
+}
