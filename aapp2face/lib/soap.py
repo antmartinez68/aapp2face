@@ -35,14 +35,15 @@ class FACeSoapClient(FACeClient):
         """Crea la conexión SOAP con FACe"""
 
         if not self._connected:
-            try:
-                self._history = HistoryPlugin()
-                wsse = BinarySignatureTimestamp(self._key, self._cert)
-                self._face = zeep.Client(self._wsdl, plugins=[self._history], wsse=wsse)
-            except FileNotFoundError as e:
-                ## Arregla esto. Tiene que generar su propia excepción
-                print(e)
-                exit(2)
+            if not Path(self._cert).is_file():
+                raise FileNotFoundError(f"El fichero del certificado no existe.")
+            if not Path(self._key).is_file():
+                raise FileNotFoundError(
+                    f"El fichero con clave privada del certificado no existe."
+                )
+            self._history = HistoryPlugin()
+            wsse = BinarySignatureTimestamp(self._key, self._cert)
+            self._face = zeep.Client(self._wsdl, plugins=[self._history], wsse=wsse)
 
     def _log_soap(self):
         """Escribe la petición y la respuesta SOAP en un archivo de registro"""
