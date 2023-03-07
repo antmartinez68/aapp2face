@@ -96,8 +96,10 @@ def init(ctx: typer.Context):
     config["FACe"]["url_staging"] = typer.prompt(
         "URL Staging FACe", config["FACe"]["url_staging"]
     )
-    config["FACe"]["use_staging"] = typer.confirm(
-        "¿Usar entorno de pruebas por defecto?", config["FACe"]["use_staging"]
+    config["FACe"]["use_staging"] = str(
+        typer.confirm(
+            "¿Usar entorno de pruebas por defecto?", config["FACe"]["use_staging"]
+        )
     )
     config["X509"]["cert_file"] = typer.prompt(
         "Archivo con el certificado de firma", config["X509"]["cert_file"]
