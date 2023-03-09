@@ -3,7 +3,6 @@ from pathlib import Path
 import pytest
 
 from aapp2face import FACeConnection, FACeFakeSoapClient
-from aapp2face.lib.exceptions import FACeManagementException
 from aapp2face.lib.objects import NotificaFactura
 
 TEST_RESPONSES_PATH = "./tests/responses"
@@ -15,7 +14,7 @@ def conexion():
     return FACeConnection(client)
 
 
-def test_gestionar_solicitud_anulacion_facturas(conexion):
+def test_notifica_factura(conexion):
     numero_registro = "2018-800"
     fecha_registro = "2018-10-09T12:00:00"
     factura = Path(TEST_RESPONSES_PATH).joinpath("sample-factura-firmada-32v1.xsig")
