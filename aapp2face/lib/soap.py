@@ -482,3 +482,53 @@ class FACeSoapClient(FACeClient):
             codigo,
             comentario,
         )
+
+    def notifica_factura(
+        self,
+        numero_registro: str,
+        fecha_registro: str,
+        factura: str,
+        organo_gestor: str,
+        unidad_tramitadora: str,
+        oficina_contable: str,
+        codigo_rcf: str,
+        estado: str,
+    ):
+        """Devuelve la respuesta del método SOAP `notificaFactura`.
+
+        Este servicio permite notificar sobre una factura recibida en
+        otro PGEFe. Se retorna un número de registro y fecha de registro
+        para poder consultar y operar la factura en FACe.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro del PGEFe.
+        fecha_registro : str
+            Fecha de registro del PGEFe formato en 'YYYY-MM-DDThh:mm:ss'
+        factura : str
+            Fichero factura en formato facturae 3.2 o 3.2.1 en base64
+        organo_gestor : str
+            Código DIR3 del Órgano Gestor.
+        unidad_tramitadora : str
+            Código DIR3 de la Unidad Tramitadora.
+        oficina_contable : str
+            Código DIR3 del Oficina Contable.
+        codigo_rcf : str
+            Código asignado dentro de RCF
+        estado : str
+            Código del estado de la factura
+        """
+
+        peticion = {
+            "numeroRegistro": numero_registro,
+            "fechaRegistro": fecha_registro,
+            "factura": factura,
+            "organoGestor": organo_gestor,
+            "unidadTramitadora": unidad_tramitadora,
+            "oficinaContable": oficina_contable,
+            "codigoRCF": codigo_rcf,
+            "estado": estado,
+        }
+
+        return self._llamar_metodo_soap("notificaFactura", peticion)

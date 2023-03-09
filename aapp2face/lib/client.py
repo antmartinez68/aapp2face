@@ -142,3 +142,19 @@ class FACeClient(ABC):
         """Gestionar la cesión de crédito de una factura."""
 
         pass
+
+    @abstractmethod
+    def notifica_factura(
+        self,
+        numero_registro: str,
+        fecha_registro: str,
+        factura: str,
+        organo_gestor: str,
+        unidad_tramitadora: str,
+        oficina_contable: str,
+        codigo_rcf: str,
+        estado: str,
+    ):
+        """Notificar una factura recibida en otro PGEFe."""
+
+        pass

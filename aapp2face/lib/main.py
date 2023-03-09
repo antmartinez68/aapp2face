@@ -2,6 +2,8 @@
 Módulo principal de la librería AAPP2FACe
 """
 
+import base64
+
 from .client import FACeClient
 from .objects import (
     AnexoFactura,
@@ -17,6 +19,7 @@ from .objects import (
     FACeItemResult,
     GestionarCesion,
     GestionarSolicitudAnulacionFactura,
+    NotificaFactura,
     NuevaAnulacion,
     NuevaFactura,
     PeticionCambiarEstadoFactura,
@@ -555,4 +558,63 @@ class FACeConnection:
             response["cesion"]["numeroRegistro"],
             response["cesion"]["codigo"],
             response["cesion"]["comentario"],
+        )
+
+    def notifica_factura(
+        self,
+        numero_registro: str,
+        fecha_registro: str,
+        path_factura: str,
+        organo_gestor: str,
+        unidad_tramitadora: str,
+        oficina_contable: str,
+        codigo_rcf: str,
+        estado: str,
+    ):
+        """Notifica una factura recibida en otro PGEFe.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro del PGEFe.
+        fecha_registro : str
+            Fecha de registro del PGEFe formato en 'YYYY-MM-DDThh:mm:ss'
+        path_factura : str
+            Ruta al fichero con la factura en formato facturae 3.2 o 3.2.1
+        organo_gestor : str
+            Código DIR3 del Órgano Gestor.
+        unidad_tramitadora : str
+            Código DIR3 de la Unidad Tramitadora.
+        oficina_contable : str
+            Código DIR3 del Oficina Contable.
+        codigo_rcf : str
+            Código asignado dentro de RCF
+        estado : str
+            Código del estado de la factura
+
+        Returns
+        -------
+        NotificaFactura
+            estructura de datos que contiene un número de registro y
+            fecha de registro para poder consultar y operar la factura
+            en FACe.
+        """
+
+        with open(path_factura, "rb") as file:
+            factura = base64.b64encode(file.read())
+
+        response = self._client.notifica_factura(
+            numero_registro,
+            fecha_registro,
+            factura,
+            organo_gestor,
+            unidad_tramitadora,
+            oficina_contable,
+            codigo_rcf,
+            estado,
+        )
+
+        return NotificaFactura(
+            response["facturas"]["numeroRegistro"],
+            response["facturas"]["fechaRegistro"],
         )

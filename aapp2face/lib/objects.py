@@ -329,3 +329,19 @@ class GestionarCesion:
     numero_registro: str
     codigo: str
     comentario: str
+
+
+@dataclass
+class NotificaFactura:
+    """Clase para respuesta FACe al notificar una factura recibida en otro PGEFe.
+
+    Attributes
+    ----------
+        numero_registro : str
+            Número de registro de la factura dentro de FACe.
+        fecha_hora_registro : str
+            Fecha de registro en el REC.
+    """
+
+    numero_registro: str
+    fecha_hora_registro: str

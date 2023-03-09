@@ -313,3 +313,18 @@ class FACeFakeSoapClient(FACeClient):
         result["cesion"]["comentario"] = comentario
 
         return result
+
+    def notifica_factura(
+        self,
+        numero_registro: str,
+        fecha_registro: str,
+        factura: str,
+        organo_gestor: str,
+        unidad_tramitadora: str,
+        oficina_contable: str,
+        codigo_rcf: str,
+        estado: str,
+    ):
+        """Simula una llamada al método `notificaFactura` en FACe."""
+
+        return self._import_response(f"notificaFactura.{numero_registro}")

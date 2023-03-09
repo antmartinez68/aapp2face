@@ -1,0 +1,11 @@
+{
+    "resultado": {
+        "codigo": "0",
+        "descripcion": "Correcto",
+        "codigoSeguimiento": null
+    },
+    "facturas": {
+        "numeroRegistro": "202001020800",
+        "fechaRegistro": "2018-10-09 14:37:56"
+    }
+}
