@@ -345,3 +345,28 @@ class NotificaFactura:
 
     numero_registro: str
     fecha_hora_registro: str
+
+
+@dataclass
+class DatosPersonales:
+    """Clase para petición FACe al notificar una factura no electrónica.
+
+    Attributes
+    ----------
+        tipo : str
+            Tipo de persona Física o Jurídica. Valores posibles (F,J).
+        nombre_razon_social : str
+            Nombre de la persona física o razón social.
+        apellido1 : str
+            Apellido 1 de la persona jurídica si procede.
+        apellido2 : str
+            Apellido 2 de la persona jurídica si procede.
+        documento_nacional : str
+            DNI de la persona física o jurídica
+    """
+
+    tipo: str
+    nombre_razon_social: str
+    apellido1: str
+    apellido2: str
+    documento_nacional: str

@@ -11,6 +11,7 @@ from .objects import (
     ConfirmaDescargaFactura,
     ConsultarEstadoFactura,
     ConsultarFactura,
+    DatosPersonales,
     DatosSolicitante,
     DescargaFactura,
     DocumentoCesion,
@@ -612,6 +613,114 @@ class FACeConnection:
             oficina_contable,
             codigo_rcf,
             estado,
+        )
+
+        return NotificaFactura(
+            response["facturas"]["numeroRegistro"],
+            response["facturas"]["fechaRegistro"],
+        )
+
+    def notifica_factura_no_electronica(
+        self,
+        numero_registro: str,
+        fecha_registro: str,
+        emisor: DatosPersonales,
+        receptor: DatosPersonales,
+        tercero: DatosPersonales,
+        numero: str,
+        serie: str,
+        importe: str,
+        fecha_expedicion: str,
+        organo_gestor: str,
+        unidad_tramitadora: str,
+        oficina_contable: str,
+        codigo_rcf: str,
+        estado: str,
+        codigo_cnae: str,
+    ):
+        """Notifica una factura no electrónica recibida.
+
+        Parameters
+        ----------
+        numero_registro : str
+            Número de registro del PGEFe.
+        fecha_registro : str
+            Fecha de registro del PGEFe en formato 'YYYY-MM-DDThh:mm:ss'
+        emisor : DatosPersonales
+            Datos del emisor
+        receptor : DatosPersonales
+            Datos del receptor
+        tercero : DatosPersonales
+            Datos del tercero
+        numero : str
+            Número de la factura
+        serie : str
+            Serie de la factura
+        importe : str
+            Importe de la factura
+        fecha_expedicion : str
+            Fecha de expedición de la factura en formato 'YYYY-MM-DDThh:mm:ss'
+        organo_gestor : str
+            Código DIR3 del Órgano Gestor.
+        unidad_tramitadora : str
+            Código DIR3 de la Unidad Tramitadora.
+        oficina_contable : str
+            Código DIR3 del Oficina Contable.
+        codigo_rcf : str
+            Código asignado dentro de RCF
+        estado : str
+            Código del estado de la factura
+        codigo_cnae : str
+            Código de CNAE de la factura
+
+        Returns
+        -------
+        NotificaFactura
+            estructura de datos que contiene un número de registro y
+            fecha de registro para poder consultar y operar la factura
+            en FACe.
+        """
+
+        emisor_dict = {
+            "tipo": emisor.tipo,
+            "nombreRazonSocial": emisor.nombre_razon_social,
+            "apellido1": emisor.apellido1,
+            "apellido2": emisor.apellido2,
+            "documentoNacional": emisor.documento_nacional,
+        }
+
+        receptor_dict = {
+            "tipo": receptor.tipo,
+            "nombreRazonSocial": receptor.nombre_razon_social,
+            "apellido1": receptor.apellido1,
+            "apellido2": receptor.apellido2,
+            "documentoNacional": receptor.documento_nacional,
+        }
+
+        tercero_dict = {
+            "tipo": tercero.tipo,
+            "nombreRazonSocial": tercero.nombre_razon_social,
+            "apellido1": tercero.apellido1,
+            "apellido2": tercero.apellido2,
+            "documentoNacional": tercero.documento_nacional,
+        }
+
+        response = self._client.notifica_factura_no_electronica(
+            numero_registro,
+            fecha_registro,
+            emisor_dict,
+            receptor_dict,
+            tercero_dict,
+            numero,
+            serie,
+            importe,
+            fecha_expedicion,
+            organo_gestor,
+            unidad_tramitadora,
+            oficina_contable,
+            codigo_rcf,
+            estado,
+            codigo_cnae,
         )
 
         return NotificaFactura(

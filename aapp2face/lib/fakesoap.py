@@ -328,3 +328,25 @@ class FACeFakeSoapClient(FACeClient):
         """Simula una llamada al método `notificaFactura` en FACe."""
 
         return self._import_response(f"notificaFactura.{numero_registro}")
+
+    def notifica_factura_no_electronica(
+        self,
+        numero_registro: str,
+        fecha_registro: str,
+        emisor: dict,
+        receptor: dict,
+        tercero: dict,
+        numero: str,
+        serie: str,
+        importe: str,
+        fecha_expedicion: str,
+        organo_gestor: str,
+        unidad_tramitadora: str,
+        oficina_contable: str,
+        codigo_rcf: str,
+        estado: str,
+        codigo_cnae: str,
+    ):
+        """Simula una llamada al método `notificaFacturaNoElectronica` en FACe."""
+
+        return self._import_response(f"notificaFacturaNoElectronica.{numero_registro}")

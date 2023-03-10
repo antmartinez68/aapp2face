@@ -532,3 +532,43 @@ class FACeSoapClient(FACeClient):
         }
 
         return self._llamar_metodo_soap("notificaFactura", peticion)
+
+    def notifica_factura_no_electronica(
+        self,
+        numero_registro: str,
+        fecha_registro: str,
+        emisor: dict,
+        receptor: dict,
+        tercero: dict,
+        numero: str,
+        serie: str,
+        importe: str,
+        fecha_expedicion: str,
+        organo_gestor: str,
+        unidad_tramitadora: str,
+        oficina_contable: str,
+        codigo_rcf: str,
+        estado: str,
+        codigo_cnae: str,
+    ):
+        """Simula una llamada al método `notificaFacturaNoElectronica` en FACe."""
+
+        peticion = {
+            "numeroRegistro": numero_registro,
+            "fechaRegistro": fecha_registro,
+            "emisor": emisor,
+            "receptor": receptor,
+            "tercero": tercero,
+            "numero": numero,
+            "serie": serie,
+            "importe": importe,
+            "fechaExpedicion": fecha_expedicion,
+            "organoGestor": organo_gestor,
+            "unidadTramitadora": unidad_tramitadora,
+            "oficinaContable": oficina_contable,
+            "codigoRCF": codigo_rcf,
+            "estado": estado,
+            "codCNAE": codigo_cnae,
+        }
+
+        return self._llamar_metodo_soap("notificaFacturaNoElectronica", peticion)
