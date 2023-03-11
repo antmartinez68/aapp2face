@@ -3,6 +3,8 @@ Módulo CLI de AAPP2FACe
 """
 
 import dataclasses
+import importlib.resources
+import shutil
 from configparser import ConfigParser
 from pathlib import Path
 from typing import Optional
@@ -224,6 +226,31 @@ def unidades(
     rprint(
         f"[info]{len(relaciones)}[/info] relaciones {'exportadas' if export else 'disponibles'}"
     )
+
+
+@app.command(hidden=True)
+def genresp(
+    dir: Path = typer.Argument(
+        ...,
+        help="Ruta donde se alojarán las respuestas de prueba.",
+        exists=True,
+        dir_okay=True,
+        writable=True,
+        resolve_path=True,
+    ),
+):
+    """Genera un juego de respuestas de prueba para el modo simulación."""
+
+    origen = importlib.resources.files("aapp2face.cli.resources") / "sim-responses"
+    for archivo in origen.glob("*"):
+        if Path(dir).joinpath(archivo.name).exists():
+            rprint(
+                f"Omitiendo [data]'{archivo.name}'[/data], el archivo ya existe en destino."
+            )
+        else:
+            shutil.copy(archivo, dir)
+    rprint(f"Juego de respuestas guardado en {dir}")
+    rprint(f"Puede encontrar más detalles en {dir}/LEEME.md")
 
 
 def version_callback(value: bool):
