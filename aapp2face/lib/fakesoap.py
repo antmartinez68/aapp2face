@@ -17,11 +17,17 @@ FILE_RESPONSE_EXTENSION = "json"
 
 
 class FACeFakeSoapClient(FACeClient):
-    """Clase que simula respuestas de una conexión a FACe a partir de
-    archivos preconfigurados
-    """
+    """Clase del conector FACe para simulación a partir de archivos preconfigurados."""
 
     def __init__(self, responses_path: Path):
+        """Constructor
+
+        Parameters
+        ----------
+        responses_path : Path
+            Ruta de los archivos respuesta preconfigurados
+        """
+
         super().__init__()
         self._responses_path = responses_path
         self._set_suffix = f".{FILE_RESPONSE_EXTENSION}"

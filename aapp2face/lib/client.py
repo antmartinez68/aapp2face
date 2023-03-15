@@ -9,7 +9,7 @@ from .objects import FACeResult, PeticionCambiarEstadoFactura
 
 
 class FACeClient(ABC):
-    """Clase base de conexión a FACe"""
+    """Interfaz de los conectores FACe."""
 
     def _verify_result_header(self, result: FACeResult):
         if result.codigo != "0":

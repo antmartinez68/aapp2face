@@ -1,5 +1,5 @@
 """
-Módulo de clases para estructuras de datos
+Módulo de clases para estructuras de datos.
 """
 
 import base64
@@ -13,13 +13,13 @@ class FACeResult:
 
     Attributes
     ----------
-        codigo : str
-            Código de resultado devuelto por FACe.
-        descripcion : str
-            Descripción asociada al resultado devuelto por FACe.
-        codigo_seguimiento : str
-            Código asociado a la trama de la llamada. Este código puede
-            ser solicitado para resolución de incidencias.
+    codigo : str
+        Código de resultado devuelto por FACe
+    descripcion : str
+        Descripción asociada al resultado devuelto por FACe
+    codigo_seguimiento : str
+        Código asociado al registro de la llamada. Este código puede
+        ser solicitado para resolución de incidencias
     """
 
     codigo: str
@@ -29,6 +29,22 @@ class FACeResult:
 
 @dataclass
 class Estado:
+    """Clase para respuesta FACe con datos de cada uno de los estados que maneja
+
+    Attributes
+    ----------
+    flujo : str
+        Flujo al que pertenece el estado
+    nombre : str
+        Nombre interno del estado
+    nombre_publico : str
+        Nombre externo del estado
+    codigo : str
+        Identificador del estado
+    descripcion : str
+        Descripción del estado
+    """
+
     flujo: str
     nombre: str
     nombre_publico: str
@@ -38,12 +54,34 @@ class Estado:
 
 @dataclass
 class UnidadDir3:
+    """Clase para respuesta FACe con datos de una unidad DIR3
+
+    Attributes
+    ----------
+    nombre : str
+        Nombre de la unidad
+    codigo : str
+        Código DIR3 de la unidad
+    """
+
     nombre: str
     codigo: str
 
 
 @dataclass
 class Relacion:
+    """Clase para respuesta FACe con datos de una relación OG-UT-OC
+
+    Attributes
+    ----------
+    organo_gestor : UnidadDir3
+        Identificación del Órgano Gestor
+    unidad_tramitadora : UnidadDir3
+        Identificación de la Unidad Tramitadora
+    oficina_contable : UnidadDir3
+        Identificación de la Oficina Contable
+    """
+
     organo_gestor: UnidadDir3
     unidad_tramitadora: UnidadDir3
     oficina_contable: UnidadDir3
@@ -51,6 +89,22 @@ class Relacion:
 
 @dataclass
 class NuevaFactura:
+    """Clase para respuestas FACe al consultar nuevas facturas.
+
+    Attributes
+    ----------
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    oficina_contable : str
+        Código DIR3 de la Oficina Contable
+    organo_gestor : str
+        Código DIR3 del Órgano Gestor
+    unidad_tramitadora : str
+        Código DIR3 de la Unidad Tramitadora
+    fecha_hora_registro : str
+        Fecha y hora de registro de la factura
+    """
+
     numero_registro: str
     oficina_contable: str
     organo_gestor: str
@@ -60,7 +114,17 @@ class NuevaFactura:
 
 @dataclass
 class AnexoFactura:
-    """Clase equivalente al parámetro AnexoFile en respuestas FACe"""
+    """Clase para respuesta FACe con anexo a una factura
+
+    Attributes
+    ----------
+    anexo : str
+        Documento del anexo en base64
+    nombre : str
+        Nombre del archivo del anexo
+    mime : str
+        Formato del archivo
+    """
 
     anexo: str
     nombre: str
@@ -72,10 +136,10 @@ class AnexoFactura:
         Parameters
         ----------
         path : str, optional
-            Ruta donde se guardará el anexo decodificada.
+            Ruta donde se guardará el anexo decodificada
         force : bool, optional
             Sobrescribe el archivo si existe. En caso contrario lanza
-            una excepción. Por defecto False.
+            una excepción. Por defecto False
         """
         decoded_data = base64.b64decode(self.anexo)
         if force:
@@ -88,6 +152,28 @@ class AnexoFactura:
 
 @dataclass
 class DescargaFactura:
+    """Clase para respuesta FACe con una factura descargada
+
+    Attributes
+    ----------
+    numero : str
+        Número de la factura
+    serie : str
+        Serie de la factura
+    importe : str
+        Importe de la factura
+    proveedor : str
+        Nombre del proveedor
+    nombre : str
+        Nombre del archivo de la factura
+    factura : str
+        Documento de la factura en base64
+    mime : str
+        Formato del archivo
+    anexos : list[AnexoFactura]
+        Lista de anexos de la factura
+    """
+
     numero: str
     serie: str
     importe: str
@@ -103,10 +189,10 @@ class DescargaFactura:
         Parameters
         ----------
         path : str, optional
-            Ruta donde se guardará la factura decodificada.
+            Ruta donde se guardará la factura decodificada
         force : bool, optional
             Sobrescribe el archivo si existe. En caso contrario lanza
-            una excepción. Por defecto False.
+            una excepción. Por defecto False
         """
         decoded_data = base64.b64decode(self.factura)
         if force:
@@ -119,6 +205,18 @@ class DescargaFactura:
 
 @dataclass
 class ConfirmaDescargaFactura:
+    """Clase para respuesta FACe al confirmar descarga de una factura.
+
+    Attributes
+    ----------
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    oficina_contable : str
+        Código DIR3 de la Oficina Contable
+    codigo : str
+        Identificador del estado asignado
+    """
+
     numero_registro: str
     oficina_contable: str
     codigo: str
@@ -126,6 +224,18 @@ class ConfirmaDescargaFactura:
 
 @dataclass
 class ConsultarEstadoFactura:
+    """Clase para estado de una factura en FACe dentro de un flujo de tramitación.
+
+    Attributes
+    ----------
+    codigo : str
+        Identificador del estado de una factura
+    descripcion : str
+        Descripción del código de estado
+    motivo : str
+        Comentario que se indicó al asignar el estado
+    """
+
     codigo: str
     descripcion: str
     motivo: str
@@ -133,6 +243,18 @@ class ConsultarEstadoFactura:
 
 @dataclass
 class ConsultarFactura:
+    """Clase para respuesta FACe al consultar estado de una factura.
+
+    Attributes
+    ----------
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    tramitacion : ConsultarEstadoFactura
+        Estado de la factura en el flujo ordinario
+    anulacion : ConsultarEstadoFactura
+        Estado de la factura en el flujo de anulación
+    """
+
     numero_registro: str
     tramitacion: ConsultarEstadoFactura
     anulacion: ConsultarEstadoFactura
@@ -144,13 +266,13 @@ class FACeItemResult:
 
     Attributes
     ----------
-        codigo : str
-            Código de resultado devuelto por FACe.
-        descripcion : str
-            Descripción asociada al resultado devuelto por FACe.
-        id : str
-            Identificador de referencia en la operación que provocó el
-            resultado. Por ejemplo un número de registro de una factura.
+    codigo : str
+        Código de resultado devuelto por FACe
+    descripcion : str
+        Descripción asociada al resultado devuelto por FACe
+    id : str
+        Identificador de referencia en la operación que provocó el
+        resultado. Por ejemplo un número de registro de una factura
     """
 
     codigo: str
@@ -164,10 +286,10 @@ class CambiarEstadoFactura:
 
     Attributes
     ----------
-        numero_registro : str
-            Número de registro de la factura dentro de FACe.
-        codigo : str
-            Identificador del código de estado asignado.
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    codigo : str
+        Identificador del estado asignado
     """
 
     numero_registro: str
@@ -180,14 +302,14 @@ class PeticionCambiarEstadoFactura:
 
     Attributes
     ----------
-        oficina_contable : str
-            Código DIR3 de la Oficina Contable.
-        numero_registro : str
-            Número de registro de la factura dentro de FACe.
-        codigo : str
-            Identificador del código de estado a asignar.
-        comentario : str
-            Comentario asociado al cambio de estado de la factura.
+    oficina_contable : str
+        Código DIR3 de la Oficina Contable.
+    numero_registro : str
+        Número de registro de la factura dentro de FACe.
+    codigo : str
+        Identificador del estado a asignar.
+    comentario : str
+        Comentario asociado al cambio de estado de la factura.
     """
 
     oficina_contable: str
@@ -198,6 +320,24 @@ class PeticionCambiarEstadoFactura:
 
 @dataclass
 class NuevaAnulacion:
+    """Clase para respuestas FACe al consultar las solicitudes de anulación.
+
+    Attributes
+    ----------
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    oficina_contable : str
+        Código DIR3 de la Oficina Contable
+    organo_gestor : str
+        Código DIR3 del Órgano Gestor
+    unidad_tramitadora : str
+        Código DIR3 de la Unidad Tramitadora
+    fecha_hora_solicitud : str
+        Fecha y hora de la solicitud de anulación
+    motivo : str
+        Motivo de la solicitud de anulación indicada por el proveedor
+    """
+
     numero_registro: str
     oficina_contable: str
     organo_gestor: str
@@ -212,10 +352,10 @@ class GestionarSolicitudAnulacionFactura:
 
     Attributes
     ----------
-        numero_registro : str
-            Número de registro de la factura dentro de FACe.
-        codigo : str
-            Identificador del código de estado asignado.
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    codigo : str
+        Identificador del estado asignado
     """
 
     numero_registro: str
@@ -228,15 +368,15 @@ class PeticionSolicitudAnulacionListadoFactura:
 
     Attributes
     ----------
-        oficina_contable : str
-            Código DIR3 de la Oficina Contable.
-        numero_registro : str
-            Número de registro de la factura dentro de FACe.
-        codigo : str
-            Identificador del código de estado a asignar.
-        comentario : str
-            Comentario asociado a la gestión de la solicitud de
-            anulación.
+    oficina_contable : str
+        Código DIR3 de la Oficina Contable
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    codigo : str
+        Identificador del estado a asignar
+    comentario : str
+        Comentario asociado a la gestión de la solicitud de
+        anulación
     """
 
     oficina_contable: str
@@ -247,16 +387,16 @@ class PeticionSolicitudAnulacionListadoFactura:
 
 @dataclass
 class EstadoCesion:
-    """Clase para peticiones FACe al cambiar estado de un listado de facturas.
+    """Clase para repuesta FACe al consultar el estado de una cesión de crédito.
 
     Attributes
     ----------
-        numero_registro : str
-            Número de registro de la factura dentro de FACe.
-        codigo : str
-            Identificador del código de estado de la cesión.
-        comentario : str
-            Comentario asociado al estado de cesión de la factura.
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    codigo : str
+        Identificador del estado de la cesión de crédito
+    comentario : str
+        Comentario asociado al estado de cesión de crédito
     """
 
     numero_registro: str
@@ -270,12 +410,12 @@ class DatosSolicitante:
 
     Attributes
     ----------
-        nif : str
-            NIF del solicitante para obtener documento de cesión.
-        nombre : str
-            Nombre del solicitante para obtener documento de cesión.
-        apellidos : str
-            Apellidos del solicitante para obtener documento de cesión.
+    nif : str
+        NIF del solicitante para obtener documento de cesión
+    nombre : str
+        Nombre del solicitante para obtener documento de cesión
+    apellidos : str
+        Apellidos del solicitante para obtener documento de cesión
     """
 
     nif: str
@@ -285,7 +425,19 @@ class DatosSolicitante:
 
 @dataclass
 class DocumentoCesion:
-    """Clase equivalente al parámetro DocumentoCesion en respuestas FACe"""
+    """Clase para respuesta FACe con el documento de una cesión de crédito
+
+    Attributes
+    ----------
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    documento : str
+        Documento de la cesión en base64
+    nombre : str
+        Nombre del documento
+    mime : str
+        Formato del documento
+    """
 
     numero_registro: str
     documento: str
@@ -298,10 +450,10 @@ class DocumentoCesion:
         Parameters
         ----------
         path : str, optional
-            Ruta donde se guardará el documento decodificada.
+            Ruta donde se guardará el documento decodificado
         force : bool, optional
             Sobrescribe el archivo si existe. En caso contrario lanza
-            una excepción. Por defecto False.
+            una excepción. Por defecto False
         """
         decoded_data = base64.b64decode(self.documento)
         if force:
@@ -318,12 +470,12 @@ class GestionarCesion:
 
     Attributes
     ----------
-        numero_registro : str
-            Número de registro de la factura dentro de FACe.
-        codigo : str
-            Identificador del código de estado de la cesión.
-        comentario : str
-            Comentario asociado al estado de la cesión de crédito.
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    codigo : str
+        Identificador del estado de la cesión
+    comentario : str
+        Comentario asociado al estado de la cesión de crédito
     """
 
     numero_registro: str
@@ -337,10 +489,10 @@ class NotificaFactura:
 
     Attributes
     ----------
-        numero_registro : str
-            Número de registro de la factura dentro de FACe.
-        fecha_hora_registro : str
-            Fecha de registro en el REC.
+    numero_registro : str
+        Número de registro de la factura dentro de FACe
+    fecha_hora_registro : str
+        Fecha de registro en el REC
     """
 
     numero_registro: str
@@ -353,16 +505,16 @@ class DatosPersonales:
 
     Attributes
     ----------
-        tipo : str
-            Tipo de persona Física o Jurídica. Valores posibles (F,J).
-        nombre_razon_social : str
-            Nombre de la persona física o razón social.
-        apellido1 : str
-            Apellido 1 de la persona jurídica si procede.
-        apellido2 : str
-            Apellido 2 de la persona jurídica si procede.
-        documento_nacional : str
-            DNI de la persona física o jurídica
+    tipo : str
+        Tipo de persona Física o Jurídica. Valores posibles ("F", "J")
+    nombre_razon_social : str
+        Nombre de la persona física o razón social
+    apellido1 : str
+        Apellido 1 de la persona jurídica si procede
+    apellido2 : str
+        Apellido 2 de la persona jurídica si procede
+    documento_nacional : str
+        DNI de la persona física o jurídica
     """
 
     tipo: str

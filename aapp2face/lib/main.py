@@ -31,18 +31,31 @@ from .objects import (
 
 
 class FACeConnection:
-    """Descripción de la Clase"""
+    """Clase principal de conexión a FACe."""
 
     def __init__(self, client: FACeClient):
+        """Constructor
+
+        Parameters
+        ----------
+        client : FACeClient
+            Conector a usar
+        """
+
         self._client = client
 
     def consultar_estados(self) -> list[Estado]:
-        """Devuelve los estados que maneja FACe para la gestión de una factura.
+        """Obtiene los estados que maneja FACe para la gestión de una factura.
 
         Existen dos flujos principales, el ordinario y el de anulación.
         El flujo ordinario corresponde al ciclo de vida de la factura, y
         el flujo de anulación corresponde al ciclo de solicitud de
         anulación.
+
+        Returns
+        -------
+        list[Estado]
+            lista de estados que maneja FACe
         """
 
         response = self._client.consultar_estados()
@@ -61,10 +74,15 @@ class FACeConnection:
         return result
 
     def consultar_unidades(self) -> list[Relacion]:
-        """Devuelve las relaciones OG-UT-OC asociadas al RCF.
+        """Obtiene las relaciones OG-UT-OC asociadas al RCF.
 
         Las relaciones OG-UT-OC obtenidas son las asociadas al RCF que
         firma la petición.
+
+        Returns
+        -------
+        list[Relacion]
+            lista de relaciones OG-UT-OC asociadas al RCF
         """
 
         response = self._client.consultar_unidades()
@@ -91,7 +109,10 @@ class FACeConnection:
     def solicitar_nuevas_facturas(
         self, oficina_contable: str = ""
     ) -> list[NuevaFactura]:
-        """Devuelve las facturas que se encuentran en estado "registrada".
+        """Obtiene las facturas que se encuentran en estado "Registrada".
+
+        El RCF debe usar periódicamente este método para obtener las
+        facturas que luego deberá recuperar.
 
         El resultado está limitado a un máximo de 500 facturas. Las
         facturas deben ser procesadas para que entren el resto de
@@ -101,7 +122,12 @@ class FACeConnection:
         ----------
         oficina_contable : str
             Código DIR3 de la Oficina Contable. Si no se pasa valor
-            retornará un listado de las facturas del RCF.
+            retornará un listado de las facturas del RCF
+
+        Returns
+        -------
+        list[NuevaFactura]
+            lista de facturas que se encuentran en estado "Registrada"
         """
 
         response = self._client.solicitar_nuevas_facturas(oficina_contable)
@@ -123,17 +149,21 @@ class FACeConnection:
     def descargar_factura(self, numero_registro: str) -> DescargaFactura:
         """Descarga una factura.
 
-        Después de llamar a este método, y una vez comprobada la
+        Este método únicamente puede ser invocado para facturas en
+        estado "Registrada". En otros casos el servicio web reportará un
+        error. Después de llamar a este método, y una vez comprobada la
         correcta recepción de la factura, el RCF debe llamar al método
-        `confirmar_descarga_factura`. Este método de descarga de
-        facturas únicamente puede ser invocado para facturas en estado
-        "Registrada". En otros casos el servicio web reportará un error.
+        `confirmar_descarga_factura`.
 
         Parameters
         ----------
         numero_registro : str
-            Número de registro en el REC, identificador único de la
-            factura dentro de la plataforma FACe a descargar.
+            Número de registro, en el REC, de la factura a descargar
+
+        Returns
+        -------
+        DescargaFactura
+            estructura que contiene la factura descargada
         """
 
         response = self._client.descargar_factura(numero_registro)
@@ -156,19 +186,30 @@ class FACeConnection:
 
     def confirmar_descarga_factura(
         self, oficina_contable: str, numero_registro: str, codigo_rcf: str
-    ):
+    ) -> ConfirmaDescargaFactura:
         """Confirma la descarga de una factura.
+
+        Este método es complementario al método `descargar_factura`, es
+        decir, el RCF deberá solicitar la confirmación de cada factura
+        descargada que se haya completado con éxito, de forma que la
+        plataforma FACe pueda realizar todas las acciones relacionadas
+        con la descarga de factura por parte del RCF. Dicho método
+        actualiza la factura al estado 1300 automáticamente.
 
         Parameters
         ----------
         oficina_contable : str
-            Código DIR3 de la Oficina Contable.
+            Código DIR3 de la Oficina Contable
         numero_registro : str
-            Número de registro en el REC, identificador único de la
-            factura dentro de la plataforma FACe para la que quiere
-            cambiar su RCF.
+            Número de registro, en el REC, de la factura para la que
+            se quiere confirmar su descarga
         codigo_rcf : str
-            Código del RCF a asignar a la factura.
+            Código del RCF a asignar a la factura
+
+        Returns
+        -------
+        ConfirmaDescargaFactura
+            estructura que contiene los datos de la confirmación
         """
 
         response = self._client.confirmar_descarga_factura(
@@ -182,14 +223,18 @@ class FACeConnection:
         )
 
     def consultar_factura(self, numero_registro: str) -> ConsultarFactura:
-        """Devuelve el estado de una factura.
+        """Consulta el estado de una factura.
 
         Parameters
         ----------
         numero_registro : str
-            Número de registro en el REC, identificador único de la
-            factura dentro de la plataforma FACe para la que quiere
-            consultarse su estado.
+            Número de registro, en el REC, de la factura para la que se
+            quiere consultar su estado
+
+        Returns
+        -------
+        ConsultarFactura
+            estructura que contiene los datos del estado de una factura
         """
 
         response = self._client.consultar_factura(numero_registro)
@@ -211,21 +256,27 @@ class FACeConnection:
 
         return result
 
-    def consultar_listado_facturas(self, numeros_registro: list[str]):
-        """Devuelve el estado de varias facturas.
+    def consultar_listado_facturas(
+        self, numeros_registro: list[str]
+    ) -> list[ConsultarFactura | FACeItemResult]:
+        """Consulta el estado de varias facturas.
 
         El servicio web limita a un máximo de 500 facturas la consulta.
 
         Parameters
         ----------
         numeros_registro : list[str]
-            Números de registro en el REC, identificadores únicos de las
-            facturas dentro de la plataforma FACe para las que quiere
-            consultarse su estado.
+            Lista de números de registro, en el REC, de las facturas
+            para las que se quiere consultar su estado
+
+        Returns
+        -------
+        list[ConsultarFactura | FACeItemResult]
+            lista con el estado de cada factura o incidencia al consultar
         """
 
         response = self._client.consultar_listado_facturas(numeros_registro)
-        result: list[str] = []
+        result: list[ConsultarFactura | FACeItemResult] = []
         if response["facturas"] is not None:
             for factura in response["facturas"]["consultarListadoFacturas"]:
                 if factura["codigo"] == "0":
@@ -259,7 +310,7 @@ class FACeConnection:
 
     def cambiar_estado_factura(
         self, oficina_contable: str, numero_registro: str, codigo: str, comentario: str
-    ):
+    ) -> CambiarEstadoFactura:
         """Cambia el estado de una factura.
 
         Los estados 1300 y 3100 no pueden ser asignados mediante este
@@ -272,15 +323,19 @@ class FACeConnection:
         Parameters
         ----------
         oficina_contable : str
-            Código DIR3 de la Oficina Contable.
+            Código DIR3 de la Oficina Contable
         numero_registro : str
-            Número de registro en el REC, identificador único de la
-            factura dentro de la plataforma FACe para la que quiere
-            cambiar su RCF.
+            Número de registro, en el REC, de la factura para la que se
+            quiere cambiar su estado
         codigo : str
-            Identificador del código de estado a asignar.
+            Identificador del estado a asignar
         comentario : str
-            Comentario asociado al cambio de estado de la factura.
+            Comentario asociado al cambio de estado de la factura
+
+        Returns
+        -------
+        CambiarEstadoFactura
+            estructura que contiene los datos del cambio de estado de la factura
         """
 
         response = self._client.cambiar_estado_factura(
@@ -294,8 +349,8 @@ class FACeConnection:
 
     def cambiar_estado_listado_facturas(
         self, facturas: list[PeticionCambiarEstadoFactura]
-    ):
-        """Cambia el estado de múltiples facturas.
+    ) -> list[CambiarEstadoFactura | FACeItemResult]:
+        """Cambia el estado de varias facturas.
 
         Las restricciones que el servicio web presenta para esta
         operación son las mismas aplicadas al método
@@ -306,7 +361,12 @@ class FACeConnection:
         Parameters
         ----------
         facturas : list[PeticionCambiarEstadoFactura]
-            Lista de peticiones con los datos de las facturas a cambiar.
+            Lista de peticiones con los datos de las facturas a cambiar
+
+        Returns
+        -------
+        list[CambiarEstadoFactura | FACeItemResult]
+            lista con el cambio de estado de cada factura o incidencia al cambiar
         """
 
         response = self._client.cambiar_estado_listado_facturas(facturas)
@@ -333,14 +393,18 @@ class FACeConnection:
         return result
 
     def consultar_codigo_rcf(self, numero_registro: str) -> str:
-        """Devuelve el código RCF de una factura.
+        """Obtiene el código RCF de una factura registrado en FACe.
 
         Parameters
         ----------
         numero_registro : str
-            Número de registro en el REC, identificador único de la
-            factura dentro de la plataforma FACe para la que quiere
-            consultarse su RCF.
+            Número de registro, en el REC, de la factura para la que se
+            quiere consultar su código RCF
+
+        Returns
+        -------
+        str
+            código RCF registrado en FACe para la factura
         """
 
         response = self._client.consultar_codigo_rcf(numero_registro)
@@ -351,17 +415,21 @@ class FACeConnection:
 
         return result
 
-    def cambiar_codigo_rcf(self, numero_registro: str, codigo_rcf: str):
+    def cambiar_codigo_rcf(self, numero_registro: str, codigo_rcf: str) -> str:
         """Cambia el código RCF de una factura.
 
         Parameters
         ----------
         numero_registro : str
-            Número de registro en el REC, identificador único de la
-            factura dentro de la plataforma FACe para la que quiere
-            cambiar su RCF.
+            Número de registro, en el REC, de la factura para la que se
+            quiere cambiar su código RCF
         codigo_rcf : str
-            Código del RCF a asignar a la factura.
+            Código RCF a asignar a la factura
+
+        Returns
+        -------
+        str
+            código RCF asignado a la factura
         """
 
         response = self._client.cambiar_codigo_rcf(numero_registro, codigo_rcf)
@@ -375,7 +443,11 @@ class FACeConnection:
     def solicitar_nuevas_anulaciones(
         self, oficina_contable: str = ""
     ) -> list[NuevaAnulacion]:
-        """Devuelve las facturas que se encuentran en estado "solicitada anulación".
+        """Obtiene las facturas que se encuentran en estado "Solicitada anulación".
+
+        El RCF debe usar periódicamente este método para conocer las
+        solicitudes de anulación de facturas realizadas en FACe por parte
+        de los proveedores.
 
         El resultado está limitado a un máximo de 500 facturas. Las
         solicitudes deben ser procesadas para que entren el resto de
@@ -385,7 +457,12 @@ class FACeConnection:
         ----------
         oficina_contable : str
             Código DIR3 de la Oficina Contable. Si no se pasa valor
-            retornará un listado de las facturas del RCF.
+            retornará un listado de las facturas del RCF
+
+        Returns
+        -------
+        list[NuevaAnulacion]
+            lista de facturas que se encuentran en estado "Solicitada anulación"
         """
 
         response = self._client.solicitar_nuevas_anulaciones(oficina_contable)
@@ -407,21 +484,26 @@ class FACeConnection:
 
     def gestionar_solicitud_anulacion_factura(
         self, oficina_contable: str, numero_registro: str, codigo: str, comentario: str
-    ):
-        """Gestiona una solicitud de anulación, aceptándo o rechazando dicha solicitud.
+    ) -> GestionarSolicitudAnulacionFactura:
+        """Gestiona una solicitud de anulación, aceptando o rechazando dicha solicitud.
 
         Parameters
         ----------
         oficina_contable : str
-            Código DIR3 de la Oficina Contable.
+            Código DIR3 de la Oficina Contable
         numero_registro : str
             Número de registro, en el REC, de la factura para la que
-            quiere gestionarse su solicitud de anulación.
+            se quiere gestionar su solicitud de anulación
         codigo : str
-            Identificador del código de estado a asignar.
+            Identificador del estado a asignar
         comentario : str
             Comentario asociado a la gestión de la solicitud de
-            anulación.
+            anulación
+
+        Returns
+        -------
+        GestionarSolicitudAnulacionFactura
+            estructura que contiene los datos de la gestión de la anulación
         """
 
         response = self._client.gestionar_solicitud_anulacion_factura(
@@ -435,7 +517,7 @@ class FACeConnection:
 
     def gestionar_solicitud_anulacion_listado_facturas(
         self, facturas: list[PeticionSolicitudAnulacionListadoFactura]
-    ):
+    ) -> list[GestionarSolicitudAnulacionFactura | FACeItemResult]:
         """Gestiona la solicitud de anulación de varias facturas.
 
         El servicio web limita a un máximo de 100 facturas la petición.
@@ -444,7 +526,12 @@ class FACeConnection:
         ----------
         facturas : list[PeticionSolicitudAnulacionListadoFactura]
             Lista de peticiones con los datos de las solicitudes de
-            anulación a gestionar.
+            anulación a gestionar
+
+        Returns
+        -------
+        list[GestionarSolicitudAnulacionFactura | FACeItemResult]
+            lista con la gestión de la anulación o incidencia al realizarla
         """
 
         response = self._client.gestionar_solicitud_anulacion_listado_facturas(facturas)
@@ -476,13 +563,13 @@ class FACeConnection:
         return result
 
     def consultar_estado_cesion(self, numero_registro: str) -> EstadoCesion:
-        """Devuelve el estado de la cesión de una factura.
+        """Obtiene el estado de la cesión de una factura.
 
         Parameters
         ----------
         numero_registro : str
             Número de registro, en el REC, de la factura para la que
-            quiere consultarse el estado de la cesión.
+            quiere consultarse el estado de la cesión
 
         Returns
         -------
@@ -502,17 +589,20 @@ class FACeConnection:
 
     def obtener_documento_cesion(
         self, csv: str, repositorio: str, solicitante: DatosSolicitante
-    ):
+    ) -> DocumentoCesion:
         """Obtiene el documento de la cesión de una factura.
+
+        Este método permite obtener el documento de la cesión conectando
+        al servicio de notarios.
 
         Parameters
         ----------
         csv : str
-            Identificador del documento.
+            Identificador del documento
         repositorio : str
-            Repositorio desde el que se obtiene el documento.
+            Repositorio desde el que se obtiene el documento
         solicitante : DatosSolicitante
-            Datos del solicitante (nif, nombre, apellidos).
+            Datos del solicitante (nif, nombre, apellidos)
 
         Returns
         -------
@@ -539,18 +629,25 @@ class FACeConnection:
 
         return result
 
-    def gestionar_cesion(self, numero_registro: str, codigo: str, comentario: str):
-        """Gestiona una cesión de crédito, aceptándo o rechazando dicha cesión.
+    def gestionar_cesion(
+        self, numero_registro: str, codigo: str, comentario: str
+    ) -> GestionarCesion:
+        """Gestiona una cesión de crédito, aceptando o rechazando dicha cesión.
 
         Parameters
         ----------
         numero_registro : str
             Número de registro, en el REC, de la factura para la que
-            quiere gestionarse la cesión de crédito.
+            quiere gestionarse la cesión de crédito
         codigo : str
-            Identificador del código de estado a asignar.
+            Identificador del estado a asignar
         comentario : str
-            Comentario asociado a la gestión de la cesión de crédito.
+            Comentario asociado a la gestión de la cesión de crédito
+
+        Returns
+        -------
+        GestionarCesion
+            estructura que contiene el resultado de la gestión de la cesión
         """
 
         response = self._client.gestionar_cesion(numero_registro, codigo, comentario)
@@ -571,25 +668,30 @@ class FACeConnection:
         oficina_contable: str,
         codigo_rcf: str,
         estado: str,
-    ):
+    ) -> NotificaFactura:
         """Notifica una factura recibida en otro PGEFe.
+
+        Este método permite notificar una factura recibida en otro
+        PGEFe. El servicio retorna un número de registro y fecha de
+        registro para poder consultar y operar la factura en FACe.
 
         Parameters
         ----------
         numero_registro : str
-            Número de registro del PGEFe.
+            Número de registro del PGEFe
         fecha_registro : str
             Fecha de registro del PGEFe formato en 'YYYY-MM-DDThh:mm:ss'
         path_factura : str
-            Ruta al fichero con la factura en formato facturae 3.2 o 3.2.1
+            Ruta local del fichero con la factura, en formato facturae
+            3.2 o 3.2.1, a enviar
         organo_gestor : str
-            Código DIR3 del Órgano Gestor.
+            Código DIR3 del Órgano Gestor
         unidad_tramitadora : str
-            Código DIR3 de la Unidad Tramitadora.
+            Código DIR3 de la Unidad Tramitadora
         oficina_contable : str
-            Código DIR3 del Oficina Contable.
+            Código DIR3 del Oficina Contable
         codigo_rcf : str
-            Código asignado dentro de RCF
+            Código asignado dentro del RCF
         estado : str
             Código del estado de la factura
 
@@ -598,7 +700,7 @@ class FACeConnection:
         NotificaFactura
             estructura de datos que contiene un número de registro y
             fecha de registro para poder consultar y operar la factura
-            en FACe.
+            en FACe
         """
 
         with open(path_factura, "rb") as file:
@@ -637,13 +739,18 @@ class FACeConnection:
         codigo_rcf: str,
         estado: str,
         codigo_cnae: str,
-    ):
+    ) -> NotificaFactura:
         """Notifica una factura no electrónica recibida.
+
+        Este método permite notificar una factura no electrónica
+        recibida en el registro administrativo de un Organismo. El
+        servicio retorna un número de registro y fecha de registro para
+        poder consultar y operar la factura en FACe.
 
         Parameters
         ----------
         numero_registro : str
-            Número de registro del PGEFe.
+            Número de registro del PGEFe
         fecha_registro : str
             Fecha de registro del PGEFe en formato 'YYYY-MM-DDThh:mm:ss'
         emisor : DatosPersonales
@@ -661,11 +768,11 @@ class FACeConnection:
         fecha_expedicion : str
             Fecha de expedición de la factura en formato 'YYYY-MM-DDThh:mm:ss'
         organo_gestor : str
-            Código DIR3 del Órgano Gestor.
+            Código DIR3 del Órgano Gestor
         unidad_tramitadora : str
-            Código DIR3 de la Unidad Tramitadora.
+            Código DIR3 de la Unidad Tramitadora
         oficina_contable : str
-            Código DIR3 del Oficina Contable.
+            Código DIR3 del Oficina Contable
         codigo_rcf : str
             Código asignado dentro de RCF
         estado : str

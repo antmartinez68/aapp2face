@@ -19,11 +19,27 @@ from .patch import BinarySignatureTimestamp
 
 
 class FACeSoapClient(FACeClient):
-    """Clase de conexión a FACe usando SOAP"""
+    """Clase del conector FACe usando SOAP."""
 
     def __init__(
         self, wsdl: str, cert: str, key: str, debug: bool = False, log_path: str = "."
     ):
+        """Constructor
+
+        Parameters
+        ----------
+        wsdl : str
+            Ruta del WSDL del servicio SOAP
+        cert : str
+            Ruta del archivo que contiene el certificado para firmar las peticiones SOAP
+        key : str
+            Ruta del archivo que contiene la clave privada del certificado
+        debug : bool
+            Flag que indica se se guarda registro de peticiones. Default: False
+        log_path : str
+            Ruta donde se ubicará el registro de peticiones. Default: "."
+        """
+
         self._wsdl = wsdl
         self._cert = cert
         self._key = key
@@ -260,15 +276,15 @@ class FACeSoapClient(FACeClient):
         Parameters
         ----------
         oficina_contable : str
-            Código DIR3 de la Oficina Contable.
+            Código DIR3 de la Oficina Contable
         numero_registro : str
             Número de registro en el REC, identificador único de la
             factura dentro de la plataforma FACe para la que quiere
-            consultarse su RCF.
+            consultarse su RCF
         codigo : str
-            Identificador del código de estado a asignar.
+            Identificador del estado a asignar
         comentario : str
-            Comentario asociado al cambio de estado de la factura.
+            Comentario asociado al cambio de estado de la factura
         """
 
         return self._llamar_metodo_soap(
@@ -368,20 +384,20 @@ class FACeSoapClient(FACeClient):
         """Devuelve la respuesta del método SOAP `gestionarSolicitudAnulacionFactura`.
 
         Este método permite gestionar una solicitud de anulación,
-        aceptándo o rechazando dicha solicitud.
+        aceptando o rechazando dicha solicitud.
 
         Parameters
         ----------
         oficina_contable : str
-            Código DIR3 de la Oficina Contable.
+            Código DIR3 de la Oficina Contable
         numero_registro : str
             Número de registro, en el REC, de la factura para la que
-            quiere gestionarse su solicitud de anulación.
+            quiere gestionarse su solicitud de anulación
         codigo : str
-            Identificador del código de estado a asignar.
+            Identificador del estado a asignar
         comentario : str
             Comentario asociado a la gestión de la solicitud de
-            anulación.
+            anulación
         """
 
         return self._llamar_metodo_soap(
@@ -462,7 +478,7 @@ class FACeSoapClient(FACeClient):
     def gestionar_cesion(self, numero_registro: str, codigo: str, comentario: str):
         """Devuelve la respuesta del método SOAP `gestionarCesion`.
 
-        Este método permite gestionar una crédito, aceptándo o
+        Este método permite gestionar una crédito, aceptando o
         rechazando dicha cesión.
 
         Parameters
@@ -471,7 +487,7 @@ class FACeSoapClient(FACeClient):
             Número de registro, en el REC, de la factura para la que
             quiere gestionarse la cesión de crédito.
         codigo : str
-            Identificador del código de estado a asignar.
+            Identificador del estado a asignar
         comentario : str
             Comentario asociado a la gestión de la cesión de crédito.
         """

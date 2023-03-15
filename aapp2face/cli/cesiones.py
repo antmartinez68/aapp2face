@@ -110,7 +110,7 @@ def gestionar(
     codigo: str = typer.Argument(
         ...,
         show_default=False,
-        help="Identificador del código de estado a asignar.",
+        help="Identificador del estado a asignar.",
     ),
     comentario: str = typer.Argument(
         ...,
