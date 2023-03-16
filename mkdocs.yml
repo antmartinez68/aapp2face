@@ -1,0 +1,72 @@
+site_name: AAPP2FACe
+site_url: https://github.com/antmartinez68/aapp2face
+site_author: Antonio Martínez
+
+copyright: Copyright &copy; 2023 Antonio Martínez
+
+repo_url: https://github.com/antmartinez68/aapp2face
+
+nav:
+  - Inicio: 'README.md'
+  - Librería:
+    - Introducción: 'lib/intro.md'
+    - Referencia API:
+      - FACeConnection: 'lib/api/FACeConnection.md'
+      - Conectores:
+        - FACeClient: 'lib/api/FACeClient.md'
+        - FACeSoapClient: 'lib/api/FACeSoapClient.md'
+        - FACeFakeSoapClient: 'lib/api/FACeFakeSoapClient.md'
+      - Objetos: 'lib/api/objects.md'
+      - Excepciones: 'lib/api/exceptions.md'
+  - CLI:
+    - Tutorial:
+      - Introducción: 'cli/tutorial/intro.md'
+      - Configuración inicial: 'cli/tutorial/configuracion.md'
+      - Consultar nuevas facturas: 'cli/tutorial/nuevas-facturas.md'
+      - Descargar facturas: 'cli/tutorial/descargar-facturas.md'
+      - Confirmar facturas: 'cli/tutorial/confirmar-facturas.md'
+      - Cambiar estado facturas: 'cli/tutorial/cambiar-estado-facturas.md'
+    - Manual de referencia: 'cli/comandos.md'
+  - Glosario: 'glossary.md'
+  - Changelog: 'changelog.md'
+
+theme:
+  name: "material"
+  language: es
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  icon:
+    logo: fontawesome/solid/building-columns
+    repo: fontawesome/brands/github-alt
+  font:
+    code: JetBrains Mono
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            show_source: false
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+extra_css:
+  - css/termynal.css
+  - css/custom.css
+  - css/mkdocstrings.css
+
+extra_javascript:
+  - js/termynal.js
+  - js/custom.js

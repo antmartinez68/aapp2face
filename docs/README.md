@@ -21,6 +21,7 @@ por usuarios finales.
 
 - Python v3.10
 
+
 ## Instalación
 
 ### Como librería
@@ -48,6 +49,7 @@ El siguiente script de ejemplo muestra cómo puedes crear los objetos
 necesarios para conectar con FACe y recuperar la información de las
 nuevas facturas que están disponibles para su descarga:
 
+
 ```python
 >>> from aapp2face import FACeConnection, FACeSoapClient
 >>> cliente = FACeSoapClient(
@@ -72,24 +74,28 @@ nuevas facturas que están disponibles para su descarga:
 La misma operación anterior puedes hacerla usando la CLI. Una vez tienes
 configurada la aplicación, basta con que ejecutes el siguiente comando:
 
+<div class="termy">
+
 ```console
 $ aapp2face facturas nuevas
 
-Número registro:    202001015624
-Fecha registro:     2023-01-19 10:57:38
-Oficina contable:   P00000010
-Órgano gestor:      P00000010
-Unidad tramitadora: P00000010
+<span style="color:#66D9EF"><b>Número registro:</b></span>    <span style="color:#A6E22E"><b>202001015624</b></span>
+<span style="color:#66D9EF"><b>Fecha registro:</b></span>     2023-01-19 10:57:38
+<span style="color:#66D9EF"><b>Oficina contable:</b></span>   P00000010
+<span style="color:#66D9EF"><b>Órgano gestor:</b></span>      P00000010
+<span style="color:#66D9EF"><b>Unidad tramitadora:</b></span> P00000010
 
-Número registro:    202001017112
-Fecha registro:     2013-01-20 11:05:51
-Oficina contable:   P00000010
-Órgano gestor:      P00000010
-Unidad tramitadora: P00000010
+<span style="color:#66D9EF"><b>Número registro:</b></span>    <span style="color:#A6E22E"><b>202001017112</b></span>
+<span style="color:#66D9EF"><b>Fecha registro:</b></span>     2013-01-20 11:05:51
+<span style="color:#66D9EF"><b>Oficina contable:</b></span>   P00000010
+<span style="color:#66D9EF"><b>Órgano gestor:</b></span>      P00000010
+<span style="color:#66D9EF"><b>Unidad tramitadora:</b></span> P00000010
 
-2 nuevas facturas disponibles
+<span style="color:#A6E22E"><b>2</b></span> nuevas facturas disponibles
 
 ```
+
+</div>
 
 ## Constuir AAPP2FACe desde código fuente
 
