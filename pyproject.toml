@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "aapp2face"
-version = "0.1.0"
-description = ""
-authors = []
+version = "1.0.0"
+description = "Librería Python para interactuar con los servicios web de FACe desde el lado de las Administraciones Públicas"
+authors = ["Antonio Martínez"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
