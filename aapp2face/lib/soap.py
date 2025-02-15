@@ -319,7 +319,7 @@ class FACeSoapClient(FACeClient):
                     "oficinaContable": factura.oficina_contable,
                     "numeroRegistro": factura.numero_registro,
                     "codigo": factura.codigo,
-                    "comentario": factura.comentario,
+                    "comentarios": factura.comentario,
                 }
             )
 
