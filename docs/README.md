@@ -21,7 +21,6 @@ por usuarios finales.
 
 - Python v3.10
 
-
 ## Instalación
 
 ### Como librería
@@ -48,7 +47,6 @@ $ pipx install aapp2face
 El siguiente script de ejemplo muestra cómo puedes crear los objetos
 necesarios para conectar con FACe y recuperar la información de las
 nuevas facturas que están disponibles para su descarga:
-
 
 ```python
 >>> from aapp2face import FACeConnection, FACeSoapClient
@@ -111,6 +109,14 @@ $ poetry run pytest
 $ poetry build
 ```
 
-> Nota: La versión inicial de este proyecto forma parte del TFG del
-Grado en Ingeniería Informática en [UNIR](https://www.unir.net) de
-Antonio Martínez.
+## Encuesta de uso
+
+Para poder entender mejor quiénes y cómo están utilizando esta librería,
+mejorarla y asegurar que se están satisfaciendo las necesidades de sus
+usuarios, hemos preparado una breve encuesta. Conocer más sobre su uso resulta
+fundamental para continuar su desarrollo y mejora.
+
+Si deseas contribuir de esta forma, te invitamos a responder la encuesta en el
+siguiente enlace: [https://forms.gle/VVX3qnJFAJeuB4Jj7](https://forms.gle/VVX3qnJFAJeuB4Jj7)
+
+Gracias por tu interés en este proyecto de software libre.
