@@ -2,87 +2,87 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/changelog/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/glossary/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/cli/comandos/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/cli/tutorial/cambiar-estado-facturas/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/cli/tutorial/configuracion/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/cli/tutorial/confirmar-facturas/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/cli/tutorial/descargar-facturas/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/cli/tutorial/intro/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/cli/tutorial/nuevas-facturas/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/lib/intro/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/lib/api/FACeClient/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/lib/api/FACeConnection/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/lib/api/FACeFakeSoapClient/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/lib/api/FACeSoapClient/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/lib/api/exceptions/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://github.com/antmartinez68/aapp2face/lib/api/objects/</loc>
-         <lastmod>2025-02-15</lastmod>
+         <lastmod>2025-02-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
